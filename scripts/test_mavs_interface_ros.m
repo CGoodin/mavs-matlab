@@ -1,9 +1,9 @@
 function test_mavs_interface_ros()
     rosinit
- 
+    CheckMavsLoaded();
     % define the scene and vehicle to load
     mavs_data_path = clib.mavs_matlab_interface.mavs.matlab.GetMavsDataPath();
-    scene_to_load = mavs_data_path+"/scenes/cube_scene.json";
+    scene_to_load = mavs_data_path+"/scenes/single_tree.json";
     veh_to_load = mavs_data_path+"/vehicles/rp3d_vehicles/mrzr4_tires_low_gear.json";
     
     % load the scene

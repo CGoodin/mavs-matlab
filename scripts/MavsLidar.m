@@ -11,6 +11,7 @@ classdef MavsLidar
             % lidar_type is a string, allowed values are:
             % M8, HDL-64E, HDL-32E, VLP-16
             % LMS-291, OS1, OS1-16, OS2, or RS32
+            CheckMavsLoaded();
             obj.id = clib.mavs_matlab_interface.mavs.matlab.CreateMavsLidar(lidar_type);
             obj.cleanup = onCleanup(@()delete(obj));
         end

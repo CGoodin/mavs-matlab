@@ -1,5 +1,6 @@
 function MavsApp
 % set up global variables which will be used in callback functions
+CheckMavsLoaded();
 global mavs_sim; %#ok<*GVMIS> 
 mavs_sim = MavsSimulation();
 

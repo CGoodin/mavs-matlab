@@ -1,9 +1,7 @@
 function lidar_occupancy_map_example()
-
+    CheckMavsLoaded();
     % define the scene to load
     mavs_data_path = clib.mavs_matlab_interface.mavs.matlab.GetMavsDataPath();
-    %scene_to_load = mavs_data_path+"/scenes/cube_scene.json";
-    %scene_to_load = mavs_data_path+"/scenes/odoa_scene_with_trees.json";
     scene_to_load = mavs_data_path+"/scenes/single_tree.json";
 
     % load the scene

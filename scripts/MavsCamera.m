@@ -8,6 +8,7 @@ classdef MavsCamera
     methods
         % camera constructor
         function obj = MavsCamera(varargin)
+            CheckMavsLoaded();
             cam_type = 'rgb';
             if (nargin>0)
                 cam_type = string(varargin{1});

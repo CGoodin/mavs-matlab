@@ -14,6 +14,7 @@ classdef MavsVehicle
             if ~exist('initial_heading','var')
                 initial_heading=0.0;
             end
+            CheckMavsLoaded();
             % veh_to_load is the full path to the vehicle file to use
             obj.id = clib.mavs_matlab_interface.mavs.matlab.LoadMavsVehicle(veh_to_load);
             clib.mavs_matlab_interface.mavs.matlab.SetMavsVehiclePose(obj.id, ...

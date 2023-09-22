@@ -1,8 +1,8 @@
 function test_mavs_camera()
-
+    CheckMavsLoaded();
     % define the scene to load
     mavs_data_path = clib.mavs_matlab_interface.mavs.matlab.GetMavsDataPath();
-    scene_to_load = mavs_data_path+"/scenes/cube_scene.json";
+    scene_to_load = mavs_data_path+"/scenes/single_tree.json";
 
     % load the scene
     scene = MavsScene(scene_to_load);

@@ -8,6 +8,7 @@ classdef MavsScene
     methods
         % scene constructor
         function obj = MavsScene(scene_to_load)
+            CheckMavsLoaded();
             % scene_to_load is the full path to the scene file to use
             obj.id = clib.mavs_matlab_interface.mavs.matlab.LoadMavsScene(scene_to_load);
             obj.cleanup = onCleanup(@()delete(obj));
