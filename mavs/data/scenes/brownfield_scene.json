@@ -1,0 +1,176 @@
+{
+	"Object Labels": "labels.json",
+
+	"Layered Surface":{
+		"Mesh": "surfaces/arcscenetin_flipped_meters.obj",
+		"Trail": {
+			"Trail Width": 4.5,
+			"Track Width": 0.45,
+			"Wheelbase": 2.0,
+			"Path": ["waypoints/brownfield_main_trail.vprp",
+			         "waypoints/brownfield_powerlinetrail.vprp",
+					 "waypoints/brownfield_shortcut.vprp",
+					 "waypoints/brownfield_southeastcorner.vprp",
+					 "waypoints/brownfield_suggestion1.vprp",
+					 "waypoints/brownfield_suggestion2.vprp"]
+		},
+		"Layers": "surface_textures/meadow_surfaces.json"
+	},
+	
+	"Surface Mesh": [
+    {
+      "Mesh": "surfaces/arcscenetin_flipped_meters.obj",
+      "Rotate Y to Z": false,
+      "YawPitchRoll": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "Position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "Scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ],
+  "Objects": [
+      { 
+      	"Mesh": "vegetation/Europe/EU39y.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 50,
+		"Polygon": [ [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.25,0.45]
+	   }
+      },
+	        { 
+      	"Mesh": "vegetation/Europe/EU39m.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 50,
+		"Polygon": [ [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.25,0.45]
+	   }
+      },
+	  { 
+      	"Mesh": "vegetation/USA_East/EA12y.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 100,
+		"Polygon": [ [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.15,0.35]
+	   }
+      },
+	{ 
+      "Mesh": "vegetation/USA_East/EA12m.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 50,
+		"Polygon": [ [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.15,0.35]
+	   }
+      },
+	  	{ 
+      "Mesh": "vegetation/USA_East/EA10y.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 25,
+		"Polygon": [ [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.15,0.35]
+	   }
+      },
+	 { 
+      	"Mesh": "vegetation/USA_Conifers/CL13y.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 50,
+		"Polygon": [  [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.15,0.35]
+	   }
+      },
+	  {
+	"Mesh": "vegetation/Groundcover/GC17_1.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 15000,
+		"Polygon": [ [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.25,0.5]
+	   }
+      },
+	 {
+	"Mesh": "vegetation/Groundcover/GC14_1.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 15000,
+		"Polygon": [ [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.25,0.5]
+	   }
+      },
+	  	  {
+	"Mesh": "vegetation/Groundcover/GC17_2.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 15000,
+		"Polygon": [ [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.25,0.5]
+	   }
+      },
+	 {
+	"Mesh": "vegetation/Groundcover/GC14_2.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 15000,
+		"Polygon": [ [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.25,0.5]
+	   }
+      },
+	  	  {
+	"Mesh": "vegetation/Groundcover/GC17_3.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 15000,
+		"Polygon": [ [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.25,0.5]
+	   }
+      },
+	 {
+	"Mesh": "vegetation/Groundcover/GC14_3.obj",
+	"Rotate Y to Z": false,
+	"Random": 
+	   {
+		"Offset":[0.0,0.0,0.0],
+		"Number": 15000,
+		"Polygon": [ [-917,-1112],[-917,1112],[917,1112],[914,-1112]],
+		"Scale": [0.25,0.5]
+	   }
+      }
+	  
+    ]    
+}

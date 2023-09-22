@@ -1,0 +1,25 @@
+# 
+# Wavefront material file
+# Converted by the DEEP Exploration  3.5.9.1158
+# Right Hemisphere, LTD
+# http://www.righthemisphere.com/
+# 
+
+newmtl Bark
+Ka 0.392157 0.392157 0.392157
+Kd 1 1 1
+Ks 0 0 0
+illum 2
+Ns 1.0
+Kd spectral spectra/oak_trunk.spec
+map_Kd EU39brk.bmp
+
+newmtl Leaf
+Ka 0.466667 0.466667 0.466667
+Kd 1 1 1
+Ks 0 0 0
+illum 2
+Ns 1.0
+Kd spectral spectra/oak_leaf.spec
+map_Kd EU39lef.bmp
+map_d EU39lef_a.bmp

@@ -1,0 +1,27 @@
+# 
+# Wavefront material file
+# Converted by the DEEP Exploration  3.5.9.1158
+# Right Hemisphere, LTD
+# http://www.righthemisphere.com/
+# 
+
+newmtl Bark
+Ka 0.392157 0.392157 0.392157
+Kd 1 1 1
+Ks 0 0 0
+illum 2
+Ns 2.0
+Ni -1.5
+Kd spectral spectra/lodgepole_pine_bark.spec
+map_Kd CL13brk.bmp
+
+newmtl Needle
+Ka 0.392157 0.392157 0.392157
+Kd 1 1 1
+Ks 0 0 0
+illum 2
+Ns 2.0
+Ni -1.5
+Kd spectral spectra/lodgepole_pine_needles.spec
+map_Kd CL13ned.bmp
+map_d CL13ned_a.bmp

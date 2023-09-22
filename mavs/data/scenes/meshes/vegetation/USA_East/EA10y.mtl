@@ -1,0 +1,56 @@
+# 
+# Wavefront material file
+# Converted by the DEEP Exploration  3.5.9.1158
+# Right Hemisphere, LTD
+# http://www.righthemisphere.com/
+# 
+
+newmtl Bark
+Ka 0.239216 0.239216 0.239216
+Kd 1 1 1
+Ks 0 0 0
+illum 2
+Ns 1.0
+Kd spectral spectra/southern_magnolia_bark.spec
+map_Kd EA10brk.bmp
+map_bump EA10brk_b.bmp
+
+newmtl Barkb
+Ka 0.392157 0.392157 0.392157
+Kd 1 1 1
+Ks 0 0 0
+illum 2
+Ns 1.0
+Kd spectral spectra/southern_magnolia_bark.spec
+map_Kd EA10brk.bmp
+map_bump EA10brk_b.bmp
+
+newmtl Leaf
+Ka 0.313726 0.313726 0.313726
+Kd 1 1 1
+Ks 0 0 0
+illum 2
+Ns 1.0
+Kd spectral spectra/southern_magnolia_leaf.spec
+map_Kd EA10lef.bmp
+map_d EA10lef_a.bmp
+
+newmtl Center
+Ka 0.392157 0.392157 0.392157
+Kd 1 1 1
+Ks 0 0 0
+illum 2
+Ns 1.0
+Kd spectral spectra/yellow_pansy_flower.spec
+map_Kd EA10cnt.bmp
+map_bump EA10cnt_b.bmp
+
+newmtl Petal
+Ka 0.392157 0.392157 0.392157
+Kd 1 1 1
+Ks 0 0 0
+illum 2
+Ns 1.0
+Kd spectral spectra/white_petunia.spec
+map_Kd EA10pet.bmp
+map_d EA10pet_a.bmp

@@ -1,0 +1,36 @@
+# 
+# Wavefront material file
+# Converted by the DEEP Exploration  3.5.9.1158
+# Right Hemisphere, LTD
+# http://www.righthemisphere.com/
+# 
+
+newmtl Stalk
+Ka 0.0980392 0.0980392 0.0980392
+Kd 0.698039 0.698039 0.698039
+Ks 0 0 0
+illum 2
+Ns 2
+Kd spectral spectra/ripgut_brome_grass.spec
+map_Kd GC14stm.bmp
+map_bump GC14stm_b.bmp
+
+newmtl Petal
+Ka 0.0980392 0.0980392 0.0980392
+Kd 0.698039 0.698039 0.698039
+Ks 0 0 0
+illum 2
+Ns 2
+Kd spectral spectra/oat_grass.spec
+map_Kd GC14pet.bmp
+map_d GC14pet_a.bmp
+
+newmtl Leaf
+Ka 0.0980392 0.0980392 0.0980392
+Kd 0.698039 0.698039 0.698039
+Ks 0 0 0
+illum 2
+Ns 2
+Kd spectral spectra/ripgut_brome_grass.spec
+map_Kd GC14lef.bmp
+map_d GC14lef_a.bmp
