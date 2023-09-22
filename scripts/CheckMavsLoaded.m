@@ -1,15 +1,19 @@
 function CheckMavsLoaded()
 
-try
-    mavs_data_path = clib.mavs_matlab_interface.mavs.matlab.GetMavsDataPath();
-catch
-    sprintf('Adding MAVS DLL to MATLAB PATH\n')
-    mavs_dll_path = '..\mavs\dll';
+fname = '..\mavs\dll';
+file = java.io.File(fname);
+canon_path = file.getCanonicalPath();
+full_path = string(canon_path);
+current_path = string(getenv('PATH'));
+
+if ~contains(current_path, full_path)
+    sprintf('Adding MAVS DLL to MATLAB PATH')
+    mavs_dll_path = full_path; %'..\mavs\dll';
     addpath(mavs_dll_path);
     syspath = getenv('PATH');
-    dllPath = mavs_dll_path;
+    dllPath = char(mavs_dll_path);
     setenv('PATH',[dllPath pathsep syspath]);
-    %savepath;
+%     %savepath;
 end
 
 end

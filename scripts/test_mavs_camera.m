@@ -10,8 +10,8 @@ function test_mavs_camera()
     % render an image
     camera = MavsCamera();
     camera.Initialize(480,270,0.006222, 0.0035, 0.0035);
-    camera.SetOffset([0.0, 0.0, 3.0], [1.0, 0.0, 0.0, 0.0]);
-    camera.SetPose([0.0, 0.0, 0.0],[1.0, 0.0, 0.0, 0.0]);
+    camera.SetOffset([0.0, 0.0, 2.0], [1.0, 0.0, 0.0, 0.0]);
+    camera.SetPose([-7.0, 0.0, 0.0],[1.0, 0.0, 0.0, 0.0]);
     camera.Update(scene.id);
     img_data = camera.GetImage();
     image(img_data);
