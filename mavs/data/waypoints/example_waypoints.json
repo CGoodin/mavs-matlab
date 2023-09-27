@@ -1,0 +1,5 @@
+{
+    "Waypoints": [[10,-10],[20,0],[30,10],[40,0],[50,-10]],
+    "Solve Potential": true,
+    "Map Resolution": 2.0
+}
