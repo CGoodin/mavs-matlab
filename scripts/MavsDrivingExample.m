@@ -1,4 +1,4 @@
-function test_mavs_interface()
+function MavsDrivingExample()
     CheckMavsLoaded();
     % define the scene and vehicle to load
     mavs_data_path = clib.mavs_matlab_interface.mavs.matlab.GetMavsDataPath();
@@ -12,7 +12,7 @@ function test_mavs_interface()
     vehicle = MavsVehicle(veh_to_load, [20,0, 0.0], pi/2.0);
 
     % create the lidar
-    lidar = MavsLidar('OS1');
+    lidar = MavsLidar('VLP-16');
     lidar.SetOffset([0.0, 0.0, 2.0], [1.0, 0.0, 0.0, 0.0]);
     
     % create the camera

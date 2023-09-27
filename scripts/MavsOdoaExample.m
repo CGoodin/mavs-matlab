@@ -1,4 +1,4 @@
-function odoa_example()
+function MavsOdoaExample()
     CheckMavsLoaded();
     % set the MAVS scene and vehicle to load
     mavs_data_path = clib.mavs_matlab_interface.mavs.matlab.GetMavsDataPath();
