@@ -1,12 +1,15 @@
 function LaunchMavs()
 
+% Add the folder with the interface scripts
+addpath('scripts\');
+
 % Make sure DLL path is loaded
-CheckMavsLoaded()
+CheckMavsLoaded();
 
 % Determine what you want to run
 answer = questdlg('What would you like to run?', ...
 	'MAVS Applications', ...
-	'Driving Example','MAVS GUI','No thank you','No thank you');
+	'Driving Example','MAVS GUI','Exit','MAVS GUI');
 
 % Handle response
 switch answer
