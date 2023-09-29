@@ -17,5 +17,13 @@ classdef MavsScene
         function delete(obj)
             clib.mavs_matlab_interface.mavs.matlab.ClearMavsScene(obj.id);
         end
+
+        function SetSoilProperties(obj, soil_type, soil_strength)
+            % soil_type should be clay or sand
+            % soil_strength = RCI of the soil in PSI
+
+            ss = 6894.76*soil_strength; % convert to pascals
+            clib.mavs_matlab_interface.mavs.matlab.SetTerrainProperties(obj.id, soil_type, ss);
+        end
     end
 end
