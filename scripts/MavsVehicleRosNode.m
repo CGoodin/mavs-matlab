@@ -5,8 +5,8 @@ classdef MavsVehicleRosNode < MavsVehicle
     end
     methods
         % vehicle node constructor
-        function obj = MavsVehicleRosNode(node_name,topic_name,veh_to_load)
-            obj = obj@MavsVehicle(veh_to_load)
+        function obj = MavsVehicleRosNode(node_name,topic_name,veh_to_load, initial_position, initial_heading)
+            obj = obj@MavsVehicle(veh_to_load,initial_position,initial_heading);
             obj.node = ros.Node(node_name);
             obj.pub = ros.Publisher(obj.node,topic_name,'nav_msgs/Odometry');
         end
