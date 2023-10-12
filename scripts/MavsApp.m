@@ -172,16 +172,16 @@ mission_view_btn.Text = 'View Mission';
 mission_view_btn.FontName = "Helvetica";
 mission_view_btn.FontWeight = "bold";
 mission_view_btn.Layout.Row=current_row;
-mission_view_btn.Layout.Column=[1 2];
+mission_view_btn.Layout.Column=[1 4];
 
-mission_approve_btn = uibutton(gl,'ButtonPushedFcn',...
-    @(mission_approve_btn,event)ApproveMission(mission_approve_btn,mission_view_btn,...
-    llc_x_edit, llc_y_edit, urc_x_edit, urc_y_edit, gp_x_edit, gp_y_edit));
-mission_approve_btn.Text = 'Approve Mission';
-mission_approve_btn.FontName = "Helvetica";
-mission_approve_btn.FontWeight = "bold";
-mission_approve_btn.Layout.Row=current_row;
-mission_approve_btn.Layout.Column=[3 4];
+% mission_approve_btn = uibutton(gl,'ButtonPushedFcn',...
+%     @(mission_approve_btn,event)ApproveMission(mission_approve_btn,mission_view_btn,...
+%     llc_x_edit, llc_y_edit, urc_x_edit, urc_y_edit, gp_x_edit, gp_y_edit));
+% mission_approve_btn.Text = 'Approve Mission';
+% mission_approve_btn.FontName = "Helvetica";
+% mission_approve_btn.FontWeight = "bold";
+% mission_approve_btn.Layout.Row=current_row;
+% mission_approve_btn.Layout.Column=[3 4];
 
 current_row = current_row + 1;
 
@@ -261,7 +261,7 @@ current_row = current_row + 1;
 
 %------ Run simulation ---------------------------------------------------%
 run_sim_btn = uibutton(gl,'ButtonPushedFcn',...
-    @(run_sim_btn,event)SimulateOdoa(run_sim_btn, fig));
+    @(run_sim_btn,event)SimulateOdoa(run_sim_btn, fig, llc_x_edit, llc_y_edit, urc_x_edit, urc_y_edit, gp_x_edit, gp_y_edit));
 
 run_sim_btn.Text = "Run Simulation";
 run_sim_btn.FontName = "Helvetica";
@@ -283,7 +283,8 @@ function AddSensor(add_sensor_btn)
     sens_gl.ColumnWidth = {'fit','1x'};
     
     type_dd = uidropdown(sens_gl, "ValueChangedFcn",@(src,event) UpdateList(src,event));
-    type_dd.Items=["Lidar"]; %#ok<NBRAK2> %,"Camera"];
+    %type_dd.Items=["Lidar"]; %#ok<NBRAK2> %,"Camera"];
+    type_dd.Items=["Lidar", "Camera"];
     type_dd.Layout.Column = [1 2];
     type_dd.Layout.Row = 1;
 
@@ -347,10 +348,29 @@ function AddSensor(add_sensor_btn)
     cancel_btn.Layout.Row=6;
     cancel_btn.Layout.Column=[3 4];
 
+    display_box = uicheckbox(sens_gl);
+    display_box.Text = 'Display Sensor Output?';
+    display_box.FontName = "Helvetica";
+    display_box.FontWeight = "bold";
+    display_box.Layout.Row=7;
+    display_box.Layout.Column=1;
+    display_box.Value = false;
+
+    save_sens_box = uicheckbox(sens_gl);
+    save_sens_box.Text = 'Save Sensor Output?';
+    save_sens_box.FontName = "Helvetica";
+    save_sens_box.FontWeight = "bold";
+    save_sens_box.Layout.Row=7;
+    save_sens_box.Layout.Column=[2 3];
+    save_sens_box.Value = false;
+
     function FinishSensor()
         if (strcmp(type_dd.Value,"Lidar"))
             lidar = MavsLidar(dd.Value);
-            mavs_sim.sensors = [mavs_sim.sensors lidar];
+            lidar.display_out = display_box.Value;
+            mavs_sim.lidars = [mavs_sim.lidars lidar];
+            mavs_sim.lidars(end).SetOffset([off_x_edit.Value, off_y_edit.Value, off_z_edit.Value],...
+            [ori_w_edit.Value, ori_x_edit.Value, ori_y_edit.Value, ori_z_edit.Value]);
         else
             camera = MavsCamera();
             % for specs, see: https://www.raspberrypi.com/documentation/accessories/camera.html
@@ -364,11 +384,15 @@ function AddSensor(add_sensor_btn)
             else
                 camera.Initialize(480,270,0.006222, 0.0035, 0.0035);
             end
-        end
-        set(add_sensor_btn,'Text','Added','Backgroundcolor',[0 1 0]);
-        set(add_sensor_btn,'Enable','off')
-        mavs_sim.sensors(end).SetOffset([off_x_edit.Value, off_y_edit.Value, off_z_edit.Value],...
+            camera.display_out = display_box.Value;
+            mavs_sim.cameras = [mavs_sim.cameras camera];
+            mavs_sim.cameras(end).SetOffset([off_x_edit.Value, off_y_edit.Value, off_z_edit.Value],...
             [ori_w_edit.Value, ori_x_edit.Value, ori_y_edit.Value, ori_z_edit.Value]);
+        end
+        %set(add_sensor_btn,'Text','Added','Backgroundcolor',[0 1 0]);
+        %set(add_sensor_btn,'Enable','off')
+        set(add_sensor_btn,'Text','Add Sensor','Backgroundcolor',[0.96,0.96,0.96]);
+        
         closereq();
         
     end
@@ -416,11 +440,11 @@ function LoadScene(scene_file_btn,scene_file_edit)
         mavs_sim.scene = MavsScene(strcat(full_path_to_scene,scene_to_load));
         scene_file_edit.Value = scene_to_load;
         mavs_sim.scene_loaded = true;
-        set(scene_file_btn,'Text','Loaded','Backgroundcolor',[0 1 0]);
-        set(scene_file_btn,'Enable','off')
-    else
-        set(scene_file_btn,'Text','Load Scene','Backgroundcolor',[0.96,0.96,0.96]);
-        set(scene_file_btn,'Enable','on')        
+        set(scene_file_btn,'Text','Load New?','Backgroundcolor',[0 1 0]);
+        %set(scene_file_btn,'Enable','off')
+    %else
+        %set(scene_file_btn,'Text','Load Scene','Backgroundcolor',[0.96,0.96,0.96]);
+        %set(scene_file_btn,'Enable','on')        
     end
     drawnow;
 end
@@ -467,8 +491,8 @@ function LoadVehicle(veh_file_btn,veh_file_edit, ...
             [x y], heading);
         veh_file_edit.Value = veh_to_load;
         mavs_sim.vehicle_loaded = true;
-        set(veh_file_btn,'Text','Loaded','Backgroundcolor',[0 1 0]);
-        set(veh_file_btn,'Enable','off')
+        set(veh_file_btn,'Text','Load New?','Backgroundcolor',[0 1 0]);
+        %set(veh_file_btn,'Enable','off')
     else
         set(veh_file_btn,'Text','Load Vehicle','Backgroundcolor',[0.96,0.96,0.96]);
         set(veh_file_btn,'Enable','on') 
@@ -522,9 +546,13 @@ function ViewMission(~,fig, llc_x_edit, llc_y_edit, urc_x_edit, ...
     end
 end
 
-function SimulateOdoa(run_sim_btn, fig)
+function SimulateOdoa(run_sim_btn, fig, llc_x_edit, llc_y_edit, urc_x_edit, urc_y_edit, gp_x_edit, gp_y_edit)
 
     global mavs_sim
+
+    mavs_sim.mission.urc = [urc_x_edit.Value, urc_y_edit.Value];
+    mavs_sim.mission.llc = [llc_x_edit.Value, llc_y_edit.Value]; 
+    mavs_sim.mission.goal_point = [gp_x_edit.Value, gp_y_edit.Value];
 
     btn_color = run_sim_btn.BackgroundColor;
     set(run_sim_btn,'Text','Running simulation...','Backgroundcolor','r','visible','on');
@@ -542,7 +570,7 @@ function SimulateOdoa(run_sim_btn, fig)
         return;
     end
 
-    if (length(mavs_sim.sensors)<1)
+    if (length(mavs_sim.lidars)<1)
         uialert(fig,'You must add a lidar sensor to the simulation.','Missing Sensor');
         set(run_sim_btn,'Text','Run Simulation','Backgroundcolor',btn_color);
         return;
@@ -637,11 +665,11 @@ function SimulateOdoa(run_sim_btn, fig)
         % update the lidar at 10 Hz
         if (mod(frame_count,10)==0)
             % set the pose of the sensor
-            mavs_sim.sensors(1).SetPose(p,q);
+            mavs_sim.lidars(1).SetPose(p,q);
         
             % do a scan and get the points
-            mavs_sim.sensors(1).Update(mavs_sim.scene.id);
-            xyz_points = mavs_sim.sensors(1).GetPoints(true);
+            mavs_sim.lidars(1).Update(mavs_sim.scene.id);
+            xyz_points = mavs_sim.lidars(1).GetPoints(true);
         
             % convert the points to a matlab point cloud object
             pc_cloud = pointCloud(xyz_points');
@@ -682,7 +710,22 @@ function SimulateOdoa(run_sim_btn, fig)
                     drawnow 
                 end
             end % run the path planner at 1 Hz
-
+            
+            % update the other sensors
+            for ln=2:length(mavs_sim.lidars)
+                mavs_sim.lidars(ln).SetPose(p,q);
+                mavs_sim.lidars(ln).Update(mavs_sim.scene.id);
+                if (mavs_sim.lidars(ln).display_out)
+                    mavs_sim.lidars(ln).Display();
+                end
+            end
+            for cn=1:length(mavs_sim.cameras)
+                mavs_sim.cameras(cn).SetPose(p,q);
+                mavs_sim.cameras(cn).Update(mavs_sim.scene.id);
+                if (mavs_sim.cameras(cn).display_out)
+                    mavs_sim.cameras(cn).Display();
+                end
+            end
         end
 
         % run the planner at 100 Hz

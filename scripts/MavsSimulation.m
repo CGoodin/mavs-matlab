@@ -4,7 +4,8 @@ classdef MavsSimulation
         vehicle;
         scene_loaded;
         vehicle_loaded;
-        sensors = [];
+        cameras = [];
+        lidars = [];
         drive_cam;
         mission;
     end

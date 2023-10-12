@@ -1,6 +1,7 @@
 classdef MavsLidar
     properties
         id = 0
+        display_out = false;
     end
     properties (Hidden)
         cleanup
