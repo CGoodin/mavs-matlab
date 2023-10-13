@@ -500,16 +500,16 @@ function LoadVehicle(veh_file_btn,veh_file_edit, ...
     drawnow;
 end
 
-function ApproveMission(mission_approve_btn,mission_view_btn,llc_x_edit, llc_y_edit, urc_x_edit, ...
-    urc_y_edit, gp_x_edit, gp_y_edit)
-    global mavs_sim;
-    mavs_sim.mission.urc = [urc_x_edit.Value, urc_y_edit.Value];
-    mavs_sim.mission.llc = [llc_x_edit.Value, llc_y_edit.Value]; 
-    mavs_sim.mission.goal_point = [gp_x_edit.Value, gp_y_edit.Value];
-    set(mission_approve_btn,'Text','Approved','Backgroundcolor',[0 1 0]);
-    set(mission_approve_btn,'Enable','off');
-    set(mission_view_btn,'Enable','off');
-end
+% function ApproveMission(mission_approve_btn,mission_view_btn,llc_x_edit, llc_y_edit, urc_x_edit, ...
+%     urc_y_edit, gp_x_edit, gp_y_edit)
+%     global mavs_sim;
+%     mavs_sim.mission.urc = [urc_x_edit.Value, urc_y_edit.Value];
+%     mavs_sim.mission.llc = [llc_x_edit.Value, llc_y_edit.Value]; 
+%     mavs_sim.mission.goal_point = [gp_x_edit.Value, gp_y_edit.Value];
+%     set(mission_approve_btn,'Text','Approved','Backgroundcolor',[0 1 0]);
+%     set(mission_approve_btn,'Enable','off');
+%     set(mission_view_btn,'Enable','off');
+% end
 
 function ViewMission(~,fig, llc_x_edit, llc_y_edit, urc_x_edit, ...
     urc_y_edit, veh_pose_x_edit, veh_pose_y_edit, gp_x_edit, gp_y_edit)
@@ -529,16 +529,20 @@ function ViewMission(~,fig, llc_x_edit, llc_y_edit, urc_x_edit, ...
         nx = int16(scene_width/pix_res);
         ny = int16(scene_height/pix_res);
         scene_viewer.Initialize(nx,ny,pix_res*nx, pix_res*ny, 1.0);
-        figure;
-    
-        scene_viewer.SetPose([0.0, 0.0, 100.0],[0.7071, 0.0, 0.7071, 0.0]);
+        xp = 0.5*(llc_x_edit.Value + urc_x_edit.Value);
+        yp = 0.5*(llc_y_edit.Value + urc_y_edit.Value);
+        scene_viewer.SetPose([xp, yp, 100.0],[0.7071, 0.0, 0.7071, 0.0]);
         scene_viewer.Update(mavs_sim.scene.id);
         img = scene_viewer.GetImage();
-        image(img);
-        gx = int16((gp_x_edit.Value-llc_x_edit.Value)/pix_res);
-        gy = int16((gp_y_edit.Value-llc_y_edit.Value)/pix_res);
-        sx = int16((veh_pose_x_edit.Value-llc_x_edit.Value)/pix_res);
-        sy = int16((veh_pose_y_edit.Value-llc_x_edit.Value)/pix_res);
+        img = flip(img, 2);
+        img = imrotate(img,-90);
+        RA = imref2d(size(img),[llc_x_edit.Value,urc_y_edit.Value],[llc_y_edit.Value, urc_y_edit.Value]);
+        imshow(img,RA);
+        set(gca,'YDir','normal');
+        gx = int16(gp_x_edit.Value);
+        gy = int16(gp_y_edit.Value);
+        sx = int16(veh_pose_x_edit.Value);
+        sy = int16(veh_pose_y_edit.Value);
         hold on;
         plot(gx,gy, 'g+', 'MarkerSize', 5, 'LineWidth', 1);
         plot(sx,sy, 'y+', 'MarkerSize', 5, 'LineWidth', 1);
