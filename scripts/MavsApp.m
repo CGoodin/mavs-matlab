@@ -8,9 +8,9 @@ mavs_sim = MavsSimulation();
 % see: https://www.mathworks.com/help/matlab/creating_guis/create-and-run-a-simple-programmatic-app.html
 fig = uifigure('Name','MAVS','Scrollable','on','Position',[488,100,560,600]);
 
-gl = uigridlayout(fig,[14,4]);
+gl = uigridlayout(fig,[16,5]);
 
-gl.RowHeight = {30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30};
+gl.RowHeight = {30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30};
 gl.ColumnWidth = {'fit','1x'};
 
 current_row = 1;
@@ -219,15 +219,21 @@ veh_file_btn.Layout.Column=4;
 current_row = current_row + 1;
 
 %------ Sensor handling _-------------------------------------------------%
+sensor_listbox = uilistbox(gl,"Items","");
+sensor_listbox.Layout.Row = [current_row current_row+1];
+sensor_listbox.Layout.Column = [3 5];
+
 add_sensor_btn = uibutton(gl,'ButtonPushedFcn',...
-    @(add_sensor_btn,event)AddSensor(add_sensor_btn));
+    @(add_sensor_btn,event)AddSensor(add_sensor_btn, sensor_listbox));
 add_sensor_btn.Text = 'Add Sensor';
 add_sensor_btn.FontName = "Helvetica";
 add_sensor_btn.FontWeight = "bold";
 add_sensor_btn.Layout.Row=current_row;
-add_sensor_btn.Layout.Column=[1 4];
+add_sensor_btn.Layout.Column=[1 2];
 
-current_row = current_row + 1;
+
+
+current_row = current_row + 2; %1;
 
 %------ Save video? ------------------------------------------------------%
 save_file_edit = uieditfield(gl);
@@ -271,15 +277,15 @@ run_sim_btn.Layout.Column=[1 4];
 
 end
 
-function AddSensor(add_sensor_btn)
+function AddSensor(add_sensor_btn, sensor_listbox)
     global mavs_sim;
     %color = add_sensor_btn.BackgroundColor;
     set(add_sensor_btn,'Text','Adding sensor...','Backgroundcolor','r','visible','on');
     drawnow;
 
     sensor_fig = uifigure('Name','Add Sensor');
-    sens_gl = uigridlayout(sensor_fig,[6,4]);
-    sens_gl.RowHeight = {30,30,30,30, 30, 30};
+    sens_gl = uigridlayout(sensor_fig,[8,4]);
+    sens_gl.RowHeight = {30,30,30,30, 30, 30, 30, 30};
     sens_gl.ColumnWidth = {'fit','1x'};
     
     type_dd = uidropdown(sens_gl, "ValueChangedFcn",@(src,event) UpdateList(src,event));
@@ -348,11 +354,18 @@ function AddSensor(add_sensor_btn)
     cancel_btn.Layout.Row=6;
     cancel_btn.Layout.Column=[3 4];
 
+    sensor_name_label = uilabel(sens_gl,'Text','Sensor Name:');
+    sensor_name_label.Layout.Row=7;
+    sensor_name_label.Layout.Column=1;
+    sensor_name_edit = uieditfield(sens_gl);
+    sensor_name_edit.Layout.Row=7;
+    sensor_name_edit.Layout.Column=[2 4];
+
     display_box = uicheckbox(sens_gl);
     display_box.Text = 'Display Sensor Output?';
     display_box.FontName = "Helvetica";
     display_box.FontWeight = "bold";
-    display_box.Layout.Row=7;
+    display_box.Layout.Row=8;
     display_box.Layout.Column=1;
     display_box.Value = false;
 
@@ -360,11 +373,16 @@ function AddSensor(add_sensor_btn)
     save_sens_box.Text = 'Save Sensor Output?';
     save_sens_box.FontName = "Helvetica";
     save_sens_box.FontWeight = "bold";
-    save_sens_box.Layout.Row=7;
+    save_sens_box.Layout.Row=8;
     save_sens_box.Layout.Column=[2 3];
     save_sens_box.Value = false;
 
     function FinishSensor()
+        if (strcmp(sensor_listbox.Items(end),""))
+            sensor_listbox.Items(end) = {type_dd.Value};
+        else
+            sensor_listbox.Items(end+1) = {type_dd.Value};
+        end
         if (strcmp(type_dd.Value,"Lidar"))
             lidar = MavsLidar(dd.Value);
             lidar.display_out = display_box.Value;
@@ -760,8 +778,8 @@ function SimulateOdoa(run_sim_btn, fig, llc_x_edit, llc_y_edit, urc_x_edit, urc_
     if (ishandle(h))
         close(h);
     end
-    set(run_sim_btn,'Text','Simulation Complete','Backgroundcolor',[0.4,0.4,0.4]);
-    set(run_sim_btn,'Enable','off')
+    set(run_sim_btn,'Text','Run Simulation','Backgroundcolor',[0.96,0.96,0.96]);
+    set(run_sim_btn,'Enable','on')
     drawnow;
 end
 
