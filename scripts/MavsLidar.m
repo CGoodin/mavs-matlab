@@ -1,7 +1,6 @@
-classdef MavsLidar
+classdef MavsLidar < MavsSensor
     properties
-        id = 0
-        display_out = false;
+
     end
     properties (Hidden)
         cleanup

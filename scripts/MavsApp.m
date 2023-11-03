@@ -385,6 +385,15 @@ add_sensor_btn.FontWeight = "bold";
 add_sensor_btn.Layout.Row=current_row;
 add_sensor_btn.Layout.Column=[1 2];
 
+remove_sensor_btn = uibutton(gl,'ButtonPushedFcn',...
+    @(remove_sensor_btn,event)RemoveSensor(sensor_listbox),...
+    'Tooltip','Remove the selected sensor from the vehicle.');
+remove_sensor_btn.Text = 'Remove Sensor';
+remove_sensor_btn.FontName = "Helvetica";
+remove_sensor_btn.FontWeight = "bold";
+remove_sensor_btn.Layout.Row=current_row+1;
+remove_sensor_btn.Layout.Column=[1 2];
+
 current_row = current_row + 2; %1;
 
 %------ Save video? ------------------------------------------------------%
@@ -446,6 +455,35 @@ drive_btn.FontWeight = "bold";
 drive_btn.Layout.Row=current_row;
 drive_btn.Layout.Column=[5 7];
 
+end
+
+function RemoveSensor(sensor_listbox)
+    global mavs_sim;
+    to_remove = -1;
+    for i=1:numel(sensor_listbox.Items)
+        if strcmp(sensor_listbox.Value,sensor_listbox.Items(i))
+            to_remove = i;
+            break;
+        end
+    end
+    if (to_remove>0)
+        for j=1:numel(mavs_sim.lidars)
+            if (strcmp(mavs_sim.lidars(j).sensor_name,sensor_listbox.Value))
+                mavs_sim.lidars(j)=[];
+                break;
+            end
+        end
+        for j=1:numel(mavs_sim.cameras)
+            if (strcmp(mavs_sim.cameras(j).sensor_name,sensor_listbox.Value))
+                mavs_sim.cameras(j)=[];
+                break;
+            end
+        end
+        for i=to_remove:numel(sensor_listbox.Items)-1
+            sensor_listbox.Items(i)=sensor_listbox.Items(i+1);
+        end
+        sensor_listbox.Items(end)='';
+    end
 end
 
 function AddSensor(add_sensor_btn, sensor_listbox)
@@ -536,7 +574,7 @@ function AddSensor(add_sensor_btn, sensor_listbox)
     sensor_name_edit.Layout.Row=6;
     sensor_name_edit.Layout.Column=[2 4];
     sensor_name_edit.Value = 'my_sensor';
-    
+
     display_box = uicheckbox(sens_gl,'Tooltip',...
         'Check to display the sensor output in real time during the simulation.');
     display_box.Text = 'Display Sensor Output?';
@@ -568,13 +606,22 @@ function AddSensor(add_sensor_btn, sensor_listbox)
     cancel_btn.Layout.Column=[3 4];
 
     function FinishSensor()
-        if (strcmp(sensor_listbox.Items(end),""))
+        for i=1:numel(sensor_listbox.Items)
+            if (strcmp(sensor_listbox.Items(i),sensor_name_edit.Value))
+                uialert(sensor_fig,'The sensor name must be unique.','Naming Error');
+                return;
+            end
+        end
+        if numel(sensor_listbox.Items)==0
+            sensor_listbox.Items = [sensor_listbox.Items {sensor_name_edit.Value}];
+        elseif (strcmp(sensor_listbox.Items(end),""))
             sensor_listbox.Items(end) = {sensor_name_edit.Value};
         else
-            sensor_listbox.Items(end+1) = {sensor_name_eidt.Value};
+            sensor_listbox.Items(end+1) = {sensor_name_edit.Value};
         end
         if (strcmp(type_dd.Value,"Lidar"))
             lidar = MavsLidar(dd.Value);
+            lidar.sensor_name = sensor_name_edit.Value;
             lidar.display_out = display_box.Value;
             mavs_sim.lidars = [mavs_sim.lidars lidar];
             mavs_sim.lidars(end).SetOffset([off_x_edit.Value, off_y_edit.Value, off_z_edit.Value],...
@@ -593,6 +640,7 @@ function AddSensor(add_sensor_btn, sensor_listbox)
                 camera.Initialize(480,270,0.006222, 0.0035, 0.0035);
             end
             camera.display_out = display_box.Value;
+            camera.sensor_name = sensor_name_edit.Value;
             mavs_sim.cameras = [mavs_sim.cameras camera];
             mavs_sim.cameras(end).SetOffset([off_x_edit.Value, off_y_edit.Value, off_z_edit.Value],...
             [ori_w_edit.Value, ori_x_edit.Value, ori_y_edit.Value, ori_z_edit.Value]);
