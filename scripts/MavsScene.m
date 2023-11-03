@@ -17,7 +17,27 @@ classdef MavsScene
         function delete(obj)
             clib.mavs_matlab_interface.mavs.matlab.ClearMavsScene(obj.id);
         end
-
+        function Advance(obj, dt)
+            clib.mavs_matlab_interface.mavs.matlab.UpdateMavsEnvironment(obj.id, dt);
+        end
+        function SetRainRate(obj, rain_rate)
+            clib.mavs_matlab_interface.mavs.matlab.SetRainRate(obj.id, rain_rate);
+        end
+        function SetFog(obj, fog)
+            clib.mavs_matlab_interface.mavs.matlab.SetFog(obj.id, fog);
+        end
+        function SetSnowRate(obj, snow_rate)
+            clib.mavs_matlab_interface.mavs.matlab.SetSnowRate(obj.id, snow_rate);
+        end
+        function SetTurbidity(obj, turbid)
+            clib.mavs_matlab_interface.mavs.matlab.SetTurbidity(obj.id, turbid);
+        end
+        function SetTimeOfDay(obj, hour)
+            clib.mavs_matlab_interface.mavs.matlab.SetHour(obj.id, hour);
+        end
+        function SetCloudCover(obj, cloud_cover_frac)
+            clib.mavs_matlab_interface.mavs.matlab.SetCloudCover(obj.id, cloud_cover_frac);
+        end
         function SetSoilProperties(obj, soil_type, soil_strength)
             % soil_type should be clay or sand
             % soil_strength = RCI of the soil in PSI

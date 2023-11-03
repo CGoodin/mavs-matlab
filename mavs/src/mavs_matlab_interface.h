@@ -23,6 +23,17 @@ EXPORT_CMD int LoadMavsScene(std::string scene_file);
 
 EXPORT_CMD void ClearMavsScene(int scene_num);
 
+EXPORT_CMD void UpdateMavsEnvironment(int scene_num, float dt);
+
+EXPORT_CMD void SetRainRate(int scene_num, float rain_rate);
+EXPORT_CMD void SetFog(int scene_num, float fog);
+EXPORT_CMD void SetSnowRate(int scene_num, float snow_rate);
+EXPORT_CMD void SetTurbidity(int scene_num, float turbid);
+EXPORT_CMD void SetHour(int scene_num, float hour);
+EXPORT_CMD void SetCloudCover(int scene_num, float cloud_cover_frac);
+
+EXPORT_CMD void SetTerrainProperties(int scene_num, std::string soil_type, float soil_strength);
+
 //----- Lidar functions --------------------------------//
 EXPORT_CMD int CreateMavsLidar(std::string lidar_type);
 

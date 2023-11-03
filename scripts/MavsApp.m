@@ -6,9 +6,9 @@ mavs_sim = MavsSimulation();
 
 % create the main app window and set the layout
 % see: https://www.mathworks.com/help/matlab/creating_guis/create-and-run-a-simple-programmatic-app.html
-fig = uifigure('Name','MAVS','Scrollable','on','Position',[488,100,560,600]);
+fig = uifigure('Name','MAVS','Scrollable','on','Position',[488,100,560,700]);
 
-gl = uigridlayout(fig,[16,5]);
+gl = uigridlayout(fig,[16,7]);
 
 gl.RowHeight = {30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30};
 gl.ColumnWidth = {'fit','1x'};
@@ -16,13 +16,17 @@ gl.ColumnWidth = {'fit','1x'};
 current_row = 1;
 
 %------ Scene handling ---------------------------------------------------%
+scene_panel = uipanel(gl);
+scene_panel.Layout.Row = [current_row, current_row+2];
+scene_panel.Layout.Column = [1 7];
+
 scene_lbl = uilabel(gl);
 scene_lbl.Text = "Scene Selection";
 scene_lbl.FontSize = 20;
 scene_lbl.FontName = "Helvetica";
 scene_lbl.FontWeight = "bold";
 scene_lbl.HorizontalAlignment = "center";
-scene_lbl.Layout.Column=[1 4];
+scene_lbl.Layout.Column=[1 7];
 scene_lbl.Layout.Row=current_row;
 current_row = current_row + 1;
 
@@ -37,14 +41,14 @@ scene_file_lbl.Layout.Column=1;
 
 scene_file_edit = uieditfield(gl);
 scene_file_edit.Layout.Row=current_row;
-scene_file_edit.Layout.Column=[2 3];
+scene_file_edit.Layout.Column=[2 5];
 
 scene_file_btn = uibutton(gl,'ButtonPushedFcn', @(scene_file_btn,event)LoadScene(scene_file_btn,scene_file_edit));
 scene_file_btn.Text = "Load Scene";
 scene_file_btn.FontName = "Helvetica";
 scene_file_btn.FontWeight = "bold";
 scene_file_btn.Layout.Row=current_row;
-scene_file_btn.Layout.Column=4;
+scene_file_btn.Layout.Column=[6 7];
 
 current_row = current_row + 1;
 
@@ -53,11 +57,19 @@ scene_view_btn.Text = 'View Scene';
 scene_view_btn.FontName = "Helvetica";
 scene_view_btn.FontWeight = "bold";
 scene_view_btn.Layout.Row=current_row;
-scene_view_btn.Layout.Column=[1 4];
+scene_view_btn.Layout.Column=[1 7];
 
 current_row = current_row + 1;
 
 %------ Mission handling -------------------------------------------------%
+env_panel = uipanel(gl);
+env_panel.Layout.Row = [current_row, current_row+7];
+env_panel.Layout.Column = [5 7];
+
+mission_panel = uipanel(gl);
+mission_panel.Layout.Row = [current_row, current_row+5];
+mission_panel.Layout.Column = [1 4];
+
 mission_lbl = uilabel(gl);
 mission_lbl.Text = "Mission Selection";
 mission_lbl.FontSize = 20;
@@ -66,10 +78,19 @@ mission_lbl.FontWeight = "bold";
 mission_lbl.HorizontalAlignment = "center";
 mission_lbl.Layout.Column=[1 4];
 mission_lbl.Layout.Row=current_row;
+
+env_lbl = uilabel(gl);
+env_lbl.Text = "Environment";
+env_lbl.FontSize = 20;
+env_lbl.FontName = "Helvetica";
+env_lbl.FontWeight = "bold";
+env_lbl.HorizontalAlignment = "center";
+env_lbl.Layout.Column=[5 7];
+env_lbl.Layout.Row=current_row;
 current_row = current_row + 1;
 
 llc_lbl = uilabel(gl);
-llc_lbl.Text = 'Lower-left Corner (ENU):';
+llc_lbl.Text = 'Lower-left Corner (x,y):';
 llc_lbl.Layout.Row=current_row;
 %llc_lbl.FontSize = 20;
 llc_lbl.FontName = "Helvetica";
@@ -89,10 +110,23 @@ llc_y_edit.Value = -100.0;
 llc_y_edit.FontName = "Helvetica";
 llc_y_edit.FontWeight = "bold";
 
+rain_lbl = uilabel(gl);
+rain_lbl.Text = 'Rain Rate (mm/h):';
+rain_lbl.Layout.Row=current_row;
+rain_lbl.FontName = "Helvetica";
+rain_lbl.FontWeight = "bold";
+rain_lbl.Layout.Column=[5, 6];
+rain_edit = uieditfield(gl,'numeric');
+rain_edit.Layout.Row=current_row;
+rain_edit.Layout.Column=7;
+rain_edit.Value = 0.0;
+rain_edit.FontName = "Helvetica";
+rain_edit.FontWeight = "bold";
+
 current_row = current_row + 1;
 
 urc_lbl = uilabel(gl);
-urc_lbl.Text = 'Upper-right Corner (ENU):';
+urc_lbl.Text = 'Upper-right Corner (x,y):';
 urc_lbl.FontName = "Helvetica";
 urc_lbl.FontWeight = "bold";
 urc_lbl.Layout.Row=current_row;
@@ -113,6 +147,19 @@ urc_y_edit.FontWeight = "bold";
 urc_y_edit.Layout.Row=current_row;
 urc_y_edit.Layout.Column=3;
 urc_y_edit.Value = 100.0;
+
+fog_lbl = uilabel(gl);
+fog_lbl.Text = 'Fog (0-100):';
+fog_lbl.Layout.Row=current_row;
+fog_lbl.FontName = "Helvetica";
+fog_lbl.FontWeight = "bold";
+fog_lbl.Layout.Column=[5, 6];
+fog_edit = uieditfield(gl,'numeric');
+fog_edit.Layout.Row=current_row;
+fog_edit.Layout.Column=7;
+fog_edit.Value = 0.0;
+fog_edit.FontName = "Helvetica";
+fog_edit.FontWeight = "bold";
 
 current_row = current_row + 1;
 
@@ -140,10 +187,23 @@ veh_pose_heading_edit.FontWeight = "bold";
 veh_pose_heading_edit.Layout.Row=current_row;
 veh_pose_heading_edit.Layout.Column=4;
 
+snow_lbl = uilabel(gl);
+snow_lbl.Text = 'Snow (mm/h):';
+snow_lbl.Layout.Row=current_row;
+snow_lbl.FontName = "Helvetica";
+snow_lbl.FontWeight = "bold";
+snow_lbl.Layout.Column=[5, 6];
+snow_edit = uieditfield(gl,'numeric');
+snow_edit.Layout.Row=current_row;
+snow_edit.Layout.Column=7;
+snow_edit.Value = 0.0;
+snow_edit.FontName = "Helvetica";
+snow_edit.FontWeight = "bold";
+
 current_row = current_row + 1;
 
 gp_lbl = uilabel(gl);
-gp_lbl.Text = 'Goal point (ENU):';
+gp_lbl.Text = 'Goal point (x,y):';
 gp_lbl.Layout.Row=current_row;
 %gp_lbl.FontSize = 20;
 gp_lbl.FontName = "Helvetica";
@@ -162,6 +222,19 @@ gp_y_edit.Layout.Column=3;
 gp_y_edit.Value = 75.0;
 gp_y_edit.FontName = "Helvetica";
 gp_y_edit.FontWeight = "bold";
+
+turbid_lbl = uilabel(gl);
+turbid_lbl.Text = 'Turbidity (2-10):';
+turbid_lbl.Layout.Row=current_row;
+turbid_lbl.FontName = "Helvetica";
+turbid_lbl.FontWeight = "bold";
+turbid_lbl.Layout.Column=[5, 6];
+turbid_edit = uieditfield(gl,'numeric');
+turbid_edit.Layout.Row=current_row;
+turbid_edit.Layout.Column=7;
+turbid_edit.Value = 0.0;
+turbid_edit.FontName = "Helvetica";
+turbid_edit.FontWeight = "bold";
 
 current_row = current_row + 1;
 
@@ -183,9 +256,26 @@ mission_view_btn.Layout.Column=[1 4];
 % mission_approve_btn.Layout.Row=current_row;
 % mission_approve_btn.Layout.Column=[3 4];
 
+tod_lbl = uilabel(gl);
+tod_lbl.Text = 'Time (0-24):';
+tod_lbl.Layout.Row=current_row;
+tod_lbl.FontName = "Helvetica";
+tod_lbl.FontWeight = "bold";
+tod_lbl.Layout.Column=[5, 6];
+tod_edit = uieditfield(gl,'numeric');
+tod_edit.Layout.Row=current_row;
+tod_edit.Layout.Column=7;
+tod_edit.Value = 12;
+tod_edit.FontName = "Helvetica";
+tod_edit.FontWeight = "bold";
+
 current_row = current_row + 1;
 
 %------ Vehicle handling -------------------------------------------------%
+vehicle_panel = uipanel(gl);
+vehicle_panel.Layout.Row = [current_row, current_row+1];
+vehicle_panel.Layout.Column = [1 4];
+
 veh_lbl = uilabel(gl);
 veh_lbl.Text = "Vehicle Selection";
 veh_lbl.FontSize = 20;
@@ -194,18 +284,33 @@ veh_lbl.FontWeight = "bold";
 veh_lbl.HorizontalAlignment = "center";
 veh_lbl.Layout.Column=[1 4];
 veh_lbl.Layout.Row=current_row;
+
+cloud_lbl = uilabel(gl);
+cloud_lbl.Text = 'Cloud Cover (0-100):';
+cloud_lbl.Layout.Row=current_row;
+cloud_lbl.FontName = "Helvetica";
+cloud_lbl.FontWeight = "bold";
+cloud_lbl.Layout.Column=[5, 6];
+cloud_edit = uieditfield(gl,'numeric');
+cloud_edit.Layout.Row=current_row;
+cloud_edit.Layout.Column=7;
+cloud_edit.Value = 0.0;
+cloud_edit.FontName = "Helvetica";
+cloud_edit.FontWeight = "bold";
+
+
 current_row = current_row + 1;
 
-veh_file_lbl = uilabel(gl);
-veh_file_lbl.Text = 'Vehicle File:';
-veh_file_lbl.FontName = "Helvetica";
-veh_file_lbl.FontWeight = "bold";
-veh_file_lbl.Layout.Row=current_row;
-veh_file_lbl.Layout.Column=1;
+%veh_file_lbl = uilabel(gl);
+%veh_file_lbl.Text = 'Vehicle File:';
+%veh_file_lbl.FontName = "Helvetica";
+%veh_file_lbl.FontWeight = "bold";
+%veh_file_lbl.Layout.Row=current_row;
+%veh_file_lbl.Layout.Column=1;
 
 veh_file_edit = uieditfield(gl);
 veh_file_edit.Layout.Row=current_row;
-veh_file_edit.Layout.Column=[2 3];
+veh_file_edit.Layout.Column=[1 2];
 
 veh_file_btn = uibutton(gl,'ButtonPushedFcn',...
     @(veh_file_btn,event)LoadVehicle(veh_file_btn,veh_file_edit, ...
@@ -214,14 +319,38 @@ veh_file_btn.Text = 'Load Vehicle';
 veh_file_btn.FontName = "Helvetica";
 veh_file_btn.FontWeight = "bold";
 veh_file_btn.Layout.Row=current_row;
-veh_file_btn.Layout.Column=4;
+veh_file_btn.Layout.Column=[3 4];
+
+
+view_env_btn = uibutton(gl,'ButtonPushedFcn',...
+    @(view_env_btn,event)ViewEnv(fig, view_env_btn, rain_edit, fog_edit, snow_edit,...
+    turbid_edit, tod_edit, cloud_edit));
+view_env_btn.Text = 'View Environment';
+view_env_btn.FontName = "Helvetica";
+view_env_btn.FontWeight = "bold";
+view_env_btn.Layout.Row=current_row;
+view_env_btn.Layout.Column=[5 7];
 
 current_row = current_row + 1;
 
 %------ Sensor handling _-------------------------------------------------%
+sensor_panel = uipanel(gl);
+sensor_panel.Layout.Row = [current_row, current_row+2];
+sensor_panel.Layout.Column = [1 7];
+
+veh_lbl = uilabel(gl);
+veh_lbl.Text = "Sensor Selection";
+veh_lbl.FontSize = 20;
+veh_lbl.FontName = "Helvetica";
+veh_lbl.FontWeight = "bold";
+veh_lbl.HorizontalAlignment = "center";
+veh_lbl.Layout.Column=[1 7];
+veh_lbl.Layout.Row=current_row;
+current_row = current_row + 1;
+
 sensor_listbox = uilistbox(gl,"Items","");
 sensor_listbox.Layout.Row = [current_row current_row+1];
-sensor_listbox.Layout.Column = [3 5];
+sensor_listbox.Layout.Column = [3 7];
 
 add_sensor_btn = uibutton(gl,'ButtonPushedFcn',...
     @(add_sensor_btn,event)AddSensor(add_sensor_btn, sensor_listbox));
@@ -231,14 +360,16 @@ add_sensor_btn.FontWeight = "bold";
 add_sensor_btn.Layout.Row=current_row;
 add_sensor_btn.Layout.Column=[1 2];
 
-
-
 current_row = current_row + 2; %1;
 
 %------ Save video? ------------------------------------------------------%
+save_panel = uipanel(gl);
+save_panel.Layout.Row = current_row;
+save_panel.Layout.Column = [1 7];
+
 save_file_edit = uieditfield(gl);
 save_file_edit.Layout.Row=current_row;
-save_file_edit.Layout.Column=[2 3];
+save_file_edit.Layout.Column=[2 4];
 save_file_edit.Value = 'mavs_matlab_playback';
 save_file_edit.FontName = "Helvetica";
 save_file_edit.FontWeight = "bold";
@@ -251,7 +382,7 @@ save_file_btn.Text = 'Set Output File';
 save_file_btn.FontName = "Helvetica";
 save_file_btn.FontWeight = "bold";
 save_file_btn.Layout.Row=current_row;
-save_file_btn.Layout.Column=4;
+save_file_btn.Layout.Column=[5 7];
 set(save_file_btn,'Enable','off')
 
 save_box = uicheckbox(gl,...
@@ -267,13 +398,23 @@ current_row = current_row + 1;
 
 %------ Run simulation ---------------------------------------------------%
 run_sim_btn = uibutton(gl,'ButtonPushedFcn',...
-    @(run_sim_btn,event)SimulateOdoa(run_sim_btn, fig, llc_x_edit, llc_y_edit, urc_x_edit, urc_y_edit, gp_x_edit, gp_y_edit));
-
-run_sim_btn.Text = "Run Simulation";
+    @(run_sim_btn,event)SimulateOdoa(run_sim_btn, fig, llc_x_edit, ...
+    llc_y_edit, urc_x_edit, urc_y_edit, gp_x_edit, gp_y_edit, ...
+    rain_edit, fog_edit, snow_edit,turbid_edit, tod_edit, cloud_edit));
+run_sim_btn.Text = "Run Autonomy";
 run_sim_btn.FontName = "Helvetica";
 run_sim_btn.FontWeight = "bold";
 run_sim_btn.Layout.Row=current_row;
-run_sim_btn.Layout.Column=[1 4];
+run_sim_btn.Layout.Column=[1 3];
+
+drive_btn = uibutton(gl,'ButtonPushedFcn',...
+    @(drive_btn,event)SimulateDrive(drive_btn, fig,...
+    rain_edit, fog_edit, snow_edit,turbid_edit, tod_edit, cloud_edit));
+drive_btn.Text = "Drive Vehicle";
+drive_btn.FontName = "Helvetica";
+drive_btn.FontWeight = "bold";
+drive_btn.Layout.Row=current_row;
+drive_btn.Layout.Column=[5 7];
 
 end
 
@@ -467,6 +608,40 @@ function LoadScene(scene_file_btn,scene_file_edit)
     drawnow;
 end
 
+function ViewEnv(fig, view_env_btn,rain_edit, fog_edit, snow_edit,...
+    turbid_edit, tod_edit, cloud_edit)
+    global mavs_sim;
+    if (~mavs_sim.scene_loaded)
+        uialert(fig,'You must load a scene before you can view it.','Missing Scene');
+        return;
+    end
+    color = view_env_btn.BackgroundColor;
+    set(view_env_btn,'Text','Viewing, close view window to exit.',...
+        'Backgroundcolor','g','visible','on');
+    drawnow;
+
+    mavs_sim.scene.SetRainRate(min(25.0,max(0.0,rain_edit.Value)));
+    mavs_sim.scene.SetFog(min(100.0,max(0.0,fog_edit.Value))/1000.0);
+    mavs_sim.scene.SetSnowRate(min(25.0,max(0.0,snow_edit.Value)));
+    mavs_sim.scene.SetTurbidity(min(10.0,max(2.0, turbid_edit.Value)));
+    mavs_sim.scene.SetTimeOfDay(min(24,max(0,tod_edit.Value)));
+    mavs_sim.scene.SetCloudCover(min(1.0,max(0.0,cloud_edit.Value/100.0)));
+
+    scene_viewer = MavsCamera();
+    scene_viewer.Initialize(480,270,0.006222, 0.0035, 0.0035);
+    scene_viewer.SetPose([0.0, 0.0, 2.0],[1.0, 0.0, 0.00, 0.0]);
+    scene_viewer.FreePose();
+    scene_viewer.Update(mavs_sim.scene.id);
+    scene_viewer.Display();
+    while(scene_viewer.IsOpen())
+        scene_viewer.Update(mavs_sim.scene.id);
+        scene_viewer.Display();
+        mavs_sim.scene.Advance(1.0/30.0);
+    end
+    set(view_env_btn,'Text','View Scene','Backgroundcolor',color);
+    drawnow;
+end
+
 function ViewScene(scene_view_btn,fig)
     global mavs_sim;
     if (~mavs_sim.scene_loaded)
@@ -568,7 +743,74 @@ function ViewMission(~,fig, llc_x_edit, llc_y_edit, urc_x_edit, ...
     end
 end
 
-function SimulateOdoa(run_sim_btn, fig, llc_x_edit, llc_y_edit, urc_x_edit, urc_y_edit, gp_x_edit, gp_y_edit)
+function SimulateDrive(drive_btn, fig,...
+    rain_edit, fog_edit, snow_edit,turbid_edit, tod_edit, cloud_edit)
+
+    global mavs_sim
+
+    btn_color = drive_btn.BackgroundColor;
+    set(drive_btn,'Text','Driving...','Backgroundcolor','r','visible','on');
+    drawnow;
+
+    if (~mavs_sim.scene_loaded)
+        uialert(fig,'You must load a scene the for simulation.','Missing Scene');
+        set(drive_btn,'Text','Drive Vehicle','Backgroundcolor',btn_color);
+        return;
+    end
+
+    if (~mavs_sim.vehicle_loaded)
+        uialert(fig,'You must load a vehicle for the simulation.','Missing Vehicle');
+        set(run_sim_btn,'Text','Run Simulation','Backgroundcolor',btn_color);
+        return;
+    end
+
+    mavs_sim.scene.SetRainRate(min(25.0,max(0.0,rain_edit.Value)));
+    mavs_sim.scene.SetFog(min(100.0,max(0.0,fog_edit.Value))/1000.0);
+    mavs_sim.scene.SetSnowRate(min(25.0,max(0.0,snow_edit.Value)));
+    mavs_sim.scene.SetTurbidity(min(10.0,max(2.0, turbid_edit.Value)));
+    mavs_sim.scene.SetTimeOfDay(min(24,max(0,tod_edit.Value)));
+    mavs_sim.scene.SetCloudCover(min(1.0,max(0.0,cloud_edit.Value/100.0)));
+
+    % create the camera for driving the vehicle
+    camera = MavsCamera();
+    % arguments are: 
+    % num_horizontal_pixels, num_vertical_pixels, 
+    % horiz_plane_size (m), vert_plane size (m), focal length (m)
+    camera.Initialize(480,270,0.006222, 0.0035, 0.0035);
+    % set the camera offset from the vehicle CG
+    camera.SetOffset([-10.0, 0.0, 3.0], [1.0, 0.0, 0.0, 0.0]);
+    % open the camera display window
+    camera.Display();
+    
+    frame_count = 0; % set the frame count to zero
+    sim_dt = 0.01; % 100 Hz timestep
+
+    while(camera.IsOpen())
+        % get the driving commands from the camera window
+        [throttle, steering, braking] = camera.GetDrivingCommand();
+    
+        % update the vehicle using the driving commands
+        mavs_sim.vehicle.Update(mavs_sim.scene.id, throttle, steering, braking, sim_dt);
+    
+        % update the sensors every 10th step (10 Hz)
+        if (mod(frame_count,10)==0)
+            % Get the current vehicle pose
+            [pos, ori] = mavs_sim.vehicle.GetPose();
+            camera.SetPose(pos,ori); % Set the camera pose
+            camera.Update(mavs_sim.scene.id); % Update the camera
+            camera.Display(); % Display the camera
+        end
+    
+        frame_count = frame_count + 1; % update the frame counter
+    end % simulation loop
+    set(drive_btn,'Text','Drive Vehicle','Backgroundcolor',[0.96,0.96,0.96]);
+    set(drive_btn,'Enable','on')
+    drawnow;
+end
+
+function SimulateOdoa(run_sim_btn, fig, llc_x_edit, llc_y_edit, ...
+    urc_x_edit, urc_y_edit, gp_x_edit, gp_y_edit,rain_edit, fog_edit, ...
+    snow_edit,turbid_edit, tod_edit, cloud_edit)
 
     global mavs_sim
 
@@ -597,6 +839,13 @@ function SimulateOdoa(run_sim_btn, fig, llc_x_edit, llc_y_edit, urc_x_edit, urc_
         set(run_sim_btn,'Text','Run Simulation','Backgroundcolor',btn_color);
         return;
     end
+
+    mavs_sim.scene.SetRainRate(min(25.0,max(0.0,rain_edit.Value)));
+    mavs_sim.scene.SetFog(min(100.0,max(0.0,fog_edit.Value))/1000.0);
+    mavs_sim.scene.SetSnowRate(min(25.0,max(0.0,snow_edit.Value)));
+    mavs_sim.scene.SetTurbidity(min(10.0,max(2.0, turbid_edit.Value)));
+    mavs_sim.scene.SetTimeOfDay(min(24,max(0,tod_edit.Value)));
+    mavs_sim.scene.SetCloudCover(min(1.0,max(0.0,cloud_edit.Value/100.0)));
 
     % control parameters
     desired_speed = 7.5;
