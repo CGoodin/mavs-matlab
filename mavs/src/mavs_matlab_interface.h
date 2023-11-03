@@ -43,6 +43,8 @@ EXPORT_CMD void UpdateMavsLidar(int lidar_num, int env_num);
 
 EXPORT_CMD void DisplayMavsLidar(int lidar_num);
 
+EXPORT_CMD std::vector<float> GetLidarPose(int lidar_num);
+
 EXPORT_CMD void SetLidarPose(int lidar_num, float px, float py, float pz, float ow, float ox, float oy, float oz);
 
 EXPORT_CMD void SetLidarOffset(int lidar_num, float px, float py, float pz, float ow, float ox, float oy, float oz);
@@ -69,6 +71,8 @@ EXPORT_CMD std::vector<float> GetCameraImage(int camera_num);
 EXPORT_CMD void DisplayMavsCamera(int camera_num);
 
 EXPORT_CMD bool IsCameraDisplayOpen(int camera_num);
+
+EXPORT_CMD std::vector<float> GetCameraPose(int camera_num);
 
 EXPORT_CMD void SetCameraPose(int camera_num, float px, float py, float pz, float ow, float ox, float oy, float oz);
 

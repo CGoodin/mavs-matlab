@@ -26,6 +26,11 @@ classdef MavsLidar < MavsSensor
                 position(1), position(2), position(3),...
                 orientation(1), orientation(2), orientation(3), orientation(4));
         end
+        function pose = GetPose(obj)
+            posebuff = clib.mavs_matlab_interface.mavs.matlab.GetLidarPose(obj.id);
+            pose = MavsPose([posebuff(1), posebuff(2), posebuff(3)], ...
+            [posebuff(4), posebuff(5), posebuff(6), posebuff(7)]);
+        end
         % update the lidar
         function Update(obj, scene_id)
             % scene_id is the id # of the scene to update

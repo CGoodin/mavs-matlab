@@ -1,6 +1,10 @@
 classdef MavsCamera < MavsSensor
     properties
-
+        num_hori_pix
+        num_vert_pix
+        hori_dim
+        vert_dim
+        flen
     end
     properties (Hidden)
         cleanup
@@ -25,7 +29,7 @@ classdef MavsCamera < MavsSensor
             clib.mavs_matlab_interface.mavs.matlab.ClearMavsCamera(obj.id);
         end
         % initialize the camera to a certain resolution and focal length
-        function Initialize(obj, num_hori_pix, num_vert_pix, hori_dim, vert_dim, flen)
+        function obj = Initialize(obj, num_hori_pix, num_vert_pix, hori_dim, vert_dim, flen)
             % num_hori_pix is the number of horizontal pixels
             % num_vert_pix is the number of vertical pixels
             % hori_dim is the size of the image plane in the horizontal
@@ -35,6 +39,11 @@ classdef MavsCamera < MavsSensor
             % flen is the focal length of the camera, in meters
             clib.mavs_matlab_interface.mavs.matlab.InitializeMavsCamera(obj.id,...
                 num_hori_pix, num_vert_pix, hori_dim, vert_dim, flen);
+            obj.flen = flen;
+            obj.num_hori_pix = num_hori_pix;
+            obj.num_vert_pix = num_vert_pix;
+            obj.hori_dim = hori_dim;
+            obj.vert_dim = vert_dim;
         end
         function FreePose(obj)
             clib.mavs_matlab_interface.mavs.matlab.FreeCamera(obj.id);
@@ -73,6 +82,28 @@ classdef MavsCamera < MavsSensor
         end
         function is_open=IsOpen(obj)
             is_open = clib.mavs_matlab_interface.mavs.matlab.IsCameraDisplayOpen(obj.id);
+        end
+        function pose = GetPose(obj)
+            posebuff = clib.mavs_matlab_interface.mavs.matlab.GetCameraPose(obj.id);
+            pose = MavsPose([posebuff(1), posebuff(2), posebuff(3)], ...
+            [posebuff(4), posebuff(5), posebuff(6), posebuff(7)]);
+        end
+        function imcoords = WorldToPixel(obj,point_3d)
+            %posebuff = clib.mavs_matlab_interface.mavs.matlab.GetCameraPose(obj.id);
+            %position = [posebuff(1), posebuff(2), posebuff(3)];
+            %orientation = [posebuff(4), posebuff(5), posebuff(6), posebuff(7)];
+            pose = obj.GetPose();
+            rotmat = quat2rotm(pose.orientation);
+            ZYX = rotmat\(point_3d'-pose.position');
+            xp = ZYX(3)/ZYX(1);
+            yp = ZYX(2)/ZYX(1);
+            x = obj.flen.*xp;
+            y = obj.flen.*yp;
+            xpixdim = obj.hori_dim/obj.num_hori_pix;
+            ypixdim = obj.vert_dim/obj.num_vert_pix;
+            v = obj.num_hori_pix - ceil((x/xpixdim)+0.5*obj.num_hori_pix);
+            u = obj.num_vert_pix -ceil((y/ypixdim)+0.5*obj.num_vert_pix);
+            imcoords = [u,v];
         end
         function img_data = GetImage(obj)
             mavs_img_buff = clib.mavs_matlab_interface.mavs.matlab.GetCameraImage(obj.id);

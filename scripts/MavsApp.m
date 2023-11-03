@@ -368,8 +368,18 @@ veh_lbl.FontSize = 20;
 veh_lbl.FontName = "Helvetica";
 veh_lbl.FontWeight = "bold";
 veh_lbl.HorizontalAlignment = "center";
-veh_lbl.Layout.Column=[1 7];
+veh_lbl.Layout.Column=[3 7];
 veh_lbl.Layout.Row=current_row;
+
+view_sensors_btn = uibutton(gl,'ButtonPushedFcn',...
+    @(view_sensors_btn,event)ViewSensors(view_sensors_btn,veh_file_edit,fig),...
+    'Tooltip','View the layout of sensors on the vehicle.');
+view_sensors_btn.Text = 'View Sensors';
+view_sensors_btn.FontName = "Helvetica";
+view_sensors_btn.FontWeight = "bold";
+view_sensors_btn.Layout.Row=current_row;
+view_sensors_btn.Layout.Column=[1 2];
+
 current_row = current_row + 1;
 
 sensor_listbox = uilistbox(gl,"Items","",'Tooltip','Sensors on the vehicle.');
@@ -484,6 +494,72 @@ function RemoveSensor(sensor_listbox)
         end
         sensor_listbox.Items(end)='';
     end
+end
+
+function ViewSensors(view_sensors_btn, veh_file_edit, fig)
+    global mavs_sim;
+
+    if (~mavs_sim.vehicle_loaded)
+        uialert(fig,'You must load a vehicle for to view the sensor layout.','Missing Vehicle');
+        %set(run_sim_btn,'Text','Run Simulation','Backgroundcolor',btn_color);
+        return;
+    end
+
+    set(view_sensors_btn,'Text','Viewing sensors...','Backgroundcolor','r','visible','on');
+    drawnow;
+
+
+    mavs_data_path = clib.mavs_matlab_interface.mavs.matlab.GetMavsDataPath();
+
+    sens_viewer = MavsCamera();
+    sens_viewer = sens_viewer.Initialize(512,512,0.0035, 0.0035, 0.0035);
+    sens_viewer.SetOffset([5.0, 0.0, 0.5],[0.0, 0.0, 0.0, 1.0]);
+    sens_viewer.FreePose();
+
+    scene = MavsScene(strcat(mavs_data_path,"/scenes/surface_only.json"));
+
+    veh_file = strcat(strcat(mavs_data_path,"/vehicles/rp3d_vehicles/"),...
+        veh_file_edit.Value);
+    vehicle = MavsVehicle(veh_file, [0.0, 0.0], 0.0);
+
+    for i=1:150
+        vehicle.Update(scene.id, 0.0, 0.0, 0.0, 0.01);
+    end
+    [p,q] = vehicle.GetPose();
+
+    sens_viewer.SetPose(p,q);
+    sens_viewer.Update(scene.id);
+    img = sens_viewer.GetImage();
+    imshow(img);
+
+    for i=1:numel(mavs_sim.lidars)
+        mavs_sim.lidars(i).SetPose(p,q);
+        pose = mavs_sim.lidars(i).GetPose();
+        center = sens_viewer.WorldToPixel(pose.position);
+        radius = 10;
+        x = center(1) - radius;
+        y = center(2) - radius;
+        w = radius * 2;
+        h = radius * 2;
+        rectangle('Position',[x y w h],'Curvature',[1 1],'FaceColor','r')
+    end
+
+    for i=1:numel(mavs_sim.cameras)
+        mavs_sim.cameras(i).SetPose(p,q);
+        pose = mavs_sim.cameras(i).GetPose();
+        center = sens_viewer.WorldToPixel(pose.position);
+        radius = 8;
+        x = center(1) - radius;
+        y = center(2) - radius;
+        w = radius * 2;
+        h = radius * 2;
+        rectangle('Position',[x y w h],'Curvature',[0 0 ],'FaceColor','b')
+    end
+
+    
+
+    set(view_sensors_btn,'Text','View Sensors','Backgroundcolor',[0.96,0.96,0.96]);
+    drawnow;
 end
 
 function AddSensor(add_sensor_btn, sensor_listbox)
@@ -772,7 +848,7 @@ function LoadVehicle(veh_file_btn,veh_file_edit, ...
     drawnow;
     mavs_data_path = clib.mavs_matlab_interface.mavs.matlab.GetMavsDataPath();
     [veh_to_load,full_path_to_veh] = uigetfile(mavs_data_path+...
-        '\vehicles\rp3d_vehicles\*.json','Select a scene file');
+        '\vehicles\rp3d_vehicles\*.json','Select a vehicle file');
     if (veh_to_load)
         x = veh_pose_x_edit.Value;
         y = veh_pose_y_edit.Value;
