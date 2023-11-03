@@ -30,7 +30,8 @@ scene_lbl.Layout.Column=[1 7];
 scene_lbl.Layout.Row=current_row;
 current_row = current_row + 1;
 
-scene_file_lbl = uilabel(gl);
+scene_file_lbl = uilabel(gl,'Tooltip', ...
+    'Click the "Load Scene" button to set');
 scene_file_lbl.Text = 'Scene File:';
 scene_file_lbl.FontSize = 16;
 scene_file_lbl.FontName = "Helvetica";
@@ -39,11 +40,14 @@ scene_file_lbl.FontWeight = "bold";
 scene_file_lbl.Layout.Row=current_row;
 scene_file_lbl.Layout.Column=1;
 
-scene_file_edit = uieditfield(gl);
+scene_file_edit = uieditfield(gl,'Tooltip', ...
+    'Click the "Load Scene" button to set');
 scene_file_edit.Layout.Row=current_row;
 scene_file_edit.Layout.Column=[2 5];
 
-scene_file_btn = uibutton(gl,'ButtonPushedFcn', @(scene_file_btn,event)LoadScene(scene_file_btn,scene_file_edit));
+scene_file_btn = uibutton(gl,'ButtonPushedFcn', ...
+    @(scene_file_btn,event)LoadScene(scene_file_btn,scene_file_edit),...
+    'Tooltip','Select the MAVS scene File');
 scene_file_btn.Text = "Load Scene";
 scene_file_btn.FontName = "Helvetica";
 scene_file_btn.FontWeight = "bold";
@@ -52,7 +56,9 @@ scene_file_btn.Layout.Column=[6 7];
 
 current_row = current_row + 1;
 
-scene_view_btn = uibutton(gl,'ButtonPushedFcn', @(scene_view_btn,event)ViewScene(scene_view_btn,fig));
+scene_view_btn = uibutton(gl,'ButtonPushedFcn', ...
+    @(scene_view_btn,event)ViewScene(scene_view_btn,fig),...
+    'Tooltip','View the selected scene');
 scene_view_btn.Text = 'View Scene';
 scene_view_btn.FontName = "Helvetica";
 scene_view_btn.FontWeight = "bold";
@@ -66,7 +72,8 @@ env_panel = uipanel(gl);
 env_panel.Layout.Row = [current_row, current_row+7];
 env_panel.Layout.Column = [5 7];
 
-mission_panel = uipanel(gl);
+mission_panel = uipanel(gl,'Tooltip',...
+    'Coordinates are in the East-North-Up (ENU) frame.');
 mission_panel.Layout.Row = [current_row, current_row+5];
 mission_panel.Layout.Column = [1 4];
 
@@ -89,7 +96,7 @@ env_lbl.Layout.Column=[5 7];
 env_lbl.Layout.Row=current_row;
 current_row = current_row + 1;
 
-llc_lbl = uilabel(gl);
+llc_lbl = uilabel(gl,'Tooltip','Southwest corner of the area-of-operation.');
 llc_lbl.Text = 'Lower-left Corner (x,y):';
 llc_lbl.Layout.Row=current_row;
 %llc_lbl.FontSize = 20;
@@ -97,26 +104,29 @@ llc_lbl.FontName = "Helvetica";
 llc_lbl.FontWeight = "bold";
 llc_lbl.Layout.Column=1;
 
-llc_x_edit = uieditfield(gl,'numeric');
+llc_x_edit = uieditfield(gl,'numeric','Tooltip',...
+    'Lowest x-coordinate, ENU meters');
 llc_x_edit.Layout.Row=current_row;
 llc_x_edit.Layout.Column=2;
 llc_x_edit.Value = -100.0;
 llc_x_edit.FontName = "Helvetica";
 llc_x_edit.FontWeight = "bold";
-llc_y_edit = uieditfield(gl,'numeric');
+llc_y_edit = uieditfield(gl,'numeric','Tooltip',...
+    'Lowest y-coordinate, ENU meters');
 llc_y_edit.Layout.Row=current_row;
 llc_y_edit.Layout.Column=3;
 llc_y_edit.Value = -100.0;
 llc_y_edit.FontName = "Helvetica";
 llc_y_edit.FontWeight = "bold";
 
-rain_lbl = uilabel(gl);
+rain_lbl = uilabel(gl, 'Tooltip','Rain rate in mm/h, 25 is max allowed.');
 rain_lbl.Text = 'Rain Rate (mm/h):';
 rain_lbl.Layout.Row=current_row;
 rain_lbl.FontName = "Helvetica";
 rain_lbl.FontWeight = "bold";
 rain_lbl.Layout.Column=[5, 6];
-rain_edit = uieditfield(gl,'numeric');
+rain_edit = uieditfield(gl,'numeric', 'Tooltip',...
+    'Rain rate in mm/h, 25 is max allowed.');
 rain_edit.Layout.Row=current_row;
 rain_edit.Layout.Column=7;
 rain_edit.Value = 0.0;
@@ -125,7 +135,7 @@ rain_edit.FontWeight = "bold";
 
 current_row = current_row + 1;
 
-urc_lbl = uilabel(gl);
+urc_lbl = uilabel(gl,'Tooltip','Northeast corner of the area-of-operation.');
 urc_lbl.Text = 'Upper-right Corner (x,y):';
 urc_lbl.FontName = "Helvetica";
 urc_lbl.FontWeight = "bold";
@@ -135,26 +145,28 @@ urc_lbl.FontName = "Helvetica";
 urc_lbl.FontWeight = "bold";
 urc_lbl.Layout.Column=1;
 
-urc_x_edit = uieditfield(gl,'numeric');
+urc_x_edit = uieditfield(gl,'numeric','Tooltip',...
+    'Highest x-coordinate, ENU meters');
 urc_x_edit.FontName = "Helvetica";
 urc_x_edit.FontWeight = "bold";
 urc_x_edit.Layout.Row=current_row;
 urc_x_edit.Layout.Column=2;
 urc_x_edit.Value = 100.0;
-urc_y_edit = uieditfield(gl,'numeric');
+urc_y_edit = uieditfield(gl,'numeric','Tooltip',...
+    'Highest y-coordinate, ENU meters');
 urc_y_edit.FontName = "Helvetica";
 urc_y_edit.FontWeight = "bold";
 urc_y_edit.Layout.Row=current_row;
 urc_y_edit.Layout.Column=3;
 urc_y_edit.Value = 100.0;
 
-fog_lbl = uilabel(gl);
+fog_lbl = uilabel(gl,'Tooltip','Fog density, 100 is max');
 fog_lbl.Text = 'Fog (0-100):';
 fog_lbl.Layout.Row=current_row;
 fog_lbl.FontName = "Helvetica";
 fog_lbl.FontWeight = "bold";
 fog_lbl.Layout.Column=[5, 6];
-fog_edit = uieditfield(gl,'numeric');
+fog_edit = uieditfield(gl,'numeric','Tooltip','Fog density, 100 is max');
 fog_edit.Layout.Row=current_row;
 fog_edit.Layout.Column=7;
 fog_edit.Value = 0.0;
@@ -163,7 +175,8 @@ fog_edit.FontWeight = "bold";
 
 current_row = current_row + 1;
 
-veh_pose_lbl = uilabel(gl);
+veh_pose_lbl = uilabel(gl,'Tooltip',...
+    'Initial position and orientation of the vehicle.');
 veh_pose_lbl.Text = 'Start Pose (x,y,heading):';
 veh_pose_lbl.Layout.Row=current_row;
 %veh_pose_lbl.FontSize = 20;
@@ -171,29 +184,32 @@ veh_pose_lbl.FontName = "Helvetica";
 veh_pose_lbl.FontWeight = "bold";
 veh_pose_lbl.Layout.Column=1;
 
-veh_pose_x_edit = uieditfield(gl,'numeric');
+veh_pose_x_edit = uieditfield(gl,'numeric','Tooltip',...
+    'Initial x-coordinate of the vehicle, in ENU meters');
 veh_pose_x_edit.FontName = "Helvetica";
 veh_pose_x_edit.FontWeight = "bold";
 veh_pose_x_edit.Layout.Row=current_row;
 veh_pose_x_edit.Layout.Column=2;
-veh_pose_y_edit = uieditfield(gl,'numeric');
+veh_pose_y_edit = uieditfield(gl,'numeric','Tooltip',...
+    'Initial y-coordinate of the vehicle, in ENU meters');
 veh_pose_y_edit.FontName = "Helvetica";
 veh_pose_y_edit.FontWeight = "bold";
 veh_pose_y_edit.Layout.Row=current_row;
 veh_pose_y_edit.Layout.Column=3;
-veh_pose_heading_edit = uieditfield(gl,'numeric');
+veh_pose_heading_edit = uieditfield(gl,'numeric','Tooltip',...
+    'Initial heading of the vehicle, radians north of east');
 veh_pose_heading_edit.FontName = "Helvetica";
 veh_pose_heading_edit.FontWeight = "bold";
 veh_pose_heading_edit.Layout.Row=current_row;
 veh_pose_heading_edit.Layout.Column=4;
 
-snow_lbl = uilabel(gl);
+snow_lbl = uilabel(gl, 'Tooltip','Snow rate, max is 25 mm/h');
 snow_lbl.Text = 'Snow (mm/h):';
 snow_lbl.Layout.Row=current_row;
 snow_lbl.FontName = "Helvetica";
 snow_lbl.FontWeight = "bold";
 snow_lbl.Layout.Column=[5, 6];
-snow_edit = uieditfield(gl,'numeric');
+snow_edit = uieditfield(gl,'numeric', 'Tooltip','Snow rate, max is 25 mm/h');
 snow_edit.Layout.Row=current_row;
 snow_edit.Layout.Column=7;
 snow_edit.Value = 0.0;
@@ -202,7 +218,7 @@ snow_edit.FontWeight = "bold";
 
 current_row = current_row + 1;
 
-gp_lbl = uilabel(gl);
+gp_lbl = uilabel(gl,'Tooltip','Desired goal point in local ENU meters');
 gp_lbl.Text = 'Goal point (x,y):';
 gp_lbl.Layout.Row=current_row;
 %gp_lbl.FontSize = 20;
@@ -210,26 +226,28 @@ gp_lbl.FontName = "Helvetica";
 gp_lbl.FontWeight = "bold";
 gp_lbl.Layout.Column=1;
 
-gp_x_edit = uieditfield(gl,'numeric');
+gp_x_edit = uieditfield(gl,'numeric','Tooltip',...
+    'x-coordinate of the goal point in ENU meters');
 gp_x_edit.Layout.Row=current_row;
 gp_x_edit.Layout.Column=2;
 gp_x_edit.Value = 75.0;
 gp_x_edit.FontName = "Helvetica";
 gp_x_edit.FontWeight = "bold";
-gp_y_edit = uieditfield(gl,'numeric');
+gp_y_edit = uieditfield(gl,'numeric','Tooltip',...
+    'y-coordinate of the goal point in ENU meters');
 gp_y_edit.Layout.Row=current_row;
 gp_y_edit.Layout.Column=3;
 gp_y_edit.Value = 75.0;
 gp_y_edit.FontName = "Helvetica";
 gp_y_edit.FontWeight = "bold";
 
-turbid_lbl = uilabel(gl);
+turbid_lbl = uilabel(gl,'Tooltip','Atmospheric turbidity (haziness)');
 turbid_lbl.Text = 'Turbidity (2-10):';
 turbid_lbl.Layout.Row=current_row;
 turbid_lbl.FontName = "Helvetica";
 turbid_lbl.FontWeight = "bold";
 turbid_lbl.Layout.Column=[5, 6];
-turbid_edit = uieditfield(gl,'numeric');
+turbid_edit = uieditfield(gl,'numeric','Tooltip','Atmospheric turbidity (haziness)');
 turbid_edit.Layout.Row=current_row;
 turbid_edit.Layout.Column=7;
 turbid_edit.Value = 0.0;
@@ -240,7 +258,8 @@ current_row = current_row + 1;
 
 mission_view_btn = uibutton(gl,'ButtonPushedFcn',...
     @(mission_view_btn,event)ViewMission(mission_view_btn,fig, llc_x_edit, llc_y_edit, urc_x_edit, ...
-    urc_y_edit, veh_pose_x_edit, veh_pose_y_edit, gp_x_edit, gp_y_edit));
+    urc_y_edit, veh_pose_x_edit, veh_pose_y_edit, gp_x_edit, gp_y_edit),...
+    'Tooltip','View the mission layout on the map');
 mission_view_btn.Text = 'View Mission';
 mission_view_btn.FontName = "Helvetica";
 mission_view_btn.FontWeight = "bold";
@@ -256,13 +275,14 @@ mission_view_btn.Layout.Column=[1 4];
 % mission_approve_btn.Layout.Row=current_row;
 % mission_approve_btn.Layout.Column=[3 4];
 
-tod_lbl = uilabel(gl);
+tod_lbl = uilabel(gl,'Tooltip','Hour of the day, in military (0-24) time.');
 tod_lbl.Text = 'Time (0-24):';
 tod_lbl.Layout.Row=current_row;
 tod_lbl.FontName = "Helvetica";
 tod_lbl.FontWeight = "bold";
 tod_lbl.Layout.Column=[5, 6];
-tod_edit = uieditfield(gl,'numeric');
+tod_edit = uieditfield(gl,'numeric','Tooltip',...
+    'Hour of the day, in military (0-24) time.');
 tod_edit.Layout.Row=current_row;
 tod_edit.Layout.Column=7;
 tod_edit.Value = 12;
@@ -285,13 +305,14 @@ veh_lbl.HorizontalAlignment = "center";
 veh_lbl.Layout.Column=[1 4];
 veh_lbl.Layout.Row=current_row;
 
-cloud_lbl = uilabel(gl);
+cloud_lbl = uilabel(gl,'Tooltip','Percent of the sky covered by clouds.');
 cloud_lbl.Text = 'Cloud Cover (0-100):';
 cloud_lbl.Layout.Row=current_row;
 cloud_lbl.FontName = "Helvetica";
 cloud_lbl.FontWeight = "bold";
 cloud_lbl.Layout.Column=[5, 6];
-cloud_edit = uieditfield(gl,'numeric');
+cloud_edit = uieditfield(gl,'numeric','Tooltip',...
+    'Percent of the sky covered by clouds.');
 cloud_edit.Layout.Row=current_row;
 cloud_edit.Layout.Column=7;
 cloud_edit.Value = 0.0;
@@ -308,13 +329,15 @@ current_row = current_row + 1;
 %veh_file_lbl.Layout.Row=current_row;
 %veh_file_lbl.Layout.Column=1;
 
-veh_file_edit = uieditfield(gl);
+veh_file_edit = uieditfield(gl,'Tooltip',...
+    'Click the "Load Vehicle" button to select a MAVS vehicle.');
 veh_file_edit.Layout.Row=current_row;
 veh_file_edit.Layout.Column=[1 2];
 
 veh_file_btn = uibutton(gl,'ButtonPushedFcn',...
     @(veh_file_btn,event)LoadVehicle(veh_file_btn,veh_file_edit, ...
-    veh_pose_x_edit, veh_pose_y_edit, veh_pose_heading_edit));
+    veh_pose_x_edit, veh_pose_y_edit, veh_pose_heading_edit),...
+    'Tooltip','Select a MAVS vehicle.');
 veh_file_btn.Text = 'Load Vehicle';
 veh_file_btn.FontName = "Helvetica";
 veh_file_btn.FontWeight = "bold";
@@ -324,7 +347,8 @@ veh_file_btn.Layout.Column=[3 4];
 
 view_env_btn = uibutton(gl,'ButtonPushedFcn',...
     @(view_env_btn,event)ViewEnv(fig, view_env_btn, rain_edit, fog_edit, snow_edit,...
-    turbid_edit, tod_edit, cloud_edit));
+    turbid_edit, tod_edit, cloud_edit),'Tooltip',...
+    'View the currently selected environmental conditions.');
 view_env_btn.Text = 'View Environment';
 view_env_btn.FontName = "Helvetica";
 view_env_btn.FontWeight = "bold";
@@ -348,12 +372,13 @@ veh_lbl.Layout.Column=[1 7];
 veh_lbl.Layout.Row=current_row;
 current_row = current_row + 1;
 
-sensor_listbox = uilistbox(gl,"Items","");
+sensor_listbox = uilistbox(gl,"Items","",'Tooltip','Sensors on the vehicle.');
 sensor_listbox.Layout.Row = [current_row current_row+1];
 sensor_listbox.Layout.Column = [3 7];
 
 add_sensor_btn = uibutton(gl,'ButtonPushedFcn',...
-    @(add_sensor_btn,event)AddSensor(add_sensor_btn, sensor_listbox));
+    @(add_sensor_btn,event)AddSensor(add_sensor_btn, sensor_listbox),...
+    'Tooltip','Add a sensor to the vehicle.');
 add_sensor_btn.Text = 'Add Sensor';
 add_sensor_btn.FontName = "Helvetica";
 add_sensor_btn.FontWeight = "bold";
@@ -367,7 +392,7 @@ save_panel = uipanel(gl);
 save_panel.Layout.Row = current_row;
 save_panel.Layout.Column = [1 7];
 
-save_file_edit = uieditfield(gl);
+save_file_edit = uieditfield(gl,'Tooltip','Full path of the output file.');
 save_file_edit.Layout.Row=current_row;
 save_file_edit.Layout.Column=[2 4];
 save_file_edit.Value = 'mavs_matlab_playback';
@@ -377,7 +402,8 @@ save_file_edit.FontWeight = "bold";
 set(save_file_edit,'Enable','off')
         
 save_file_btn = uibutton(gl,'ButtonPushedFcn',...
-    @(save_file_btn,event)SaveMovieFile(save_file_btn,save_file_edit));
+    @(save_file_btn,event)SaveMovieFile(save_file_btn,save_file_edit),...
+     'Tooltip', ['Click this to set the output file',newline,'Do not include an extension']);
 save_file_btn.Text = 'Set Output File';
 save_file_btn.FontName = "Helvetica";
 save_file_btn.FontWeight = "bold";
@@ -386,7 +412,9 @@ save_file_btn.Layout.Column=[5 7];
 set(save_file_btn,'Enable','off')
 
 save_box = uicheckbox(gl,...
-    'ValueChangedFcn',@(save_box,event) SaveBoxChanged(save_box,save_file_edit, save_file_btn));
+    'ValueChangedFcn',...
+    @(save_box,event) SaveBoxChanged(save_box,save_file_edit, save_file_btn),...
+    'Tooltip','Check this box to save video output of the simulation.');
 save_box.Text = 'Save Video';
 save_box.FontName = "Helvetica";
 save_box.FontWeight = "bold";
@@ -400,7 +428,8 @@ current_row = current_row + 1;
 run_sim_btn = uibutton(gl,'ButtonPushedFcn',...
     @(run_sim_btn,event)SimulateOdoa(run_sim_btn, fig, llc_x_edit, ...
     llc_y_edit, urc_x_edit, urc_y_edit, gp_x_edit, gp_y_edit, ...
-    rain_edit, fog_edit, snow_edit,turbid_edit, tod_edit, cloud_edit));
+    rain_edit, fog_edit, snow_edit,turbid_edit, tod_edit, cloud_edit),...
+    'Tooltip','Run a simulation in autonomous mode.');
 run_sim_btn.Text = "Run Autonomy";
 run_sim_btn.FontName = "Helvetica";
 run_sim_btn.FontWeight = "bold";
@@ -409,7 +438,8 @@ run_sim_btn.Layout.Column=[1 3];
 
 drive_btn = uibutton(gl,'ButtonPushedFcn',...
     @(drive_btn,event)SimulateDrive(drive_btn, fig,...
-    rain_edit, fog_edit, snow_edit,turbid_edit, tod_edit, cloud_edit));
+    rain_edit, fog_edit, snow_edit,turbid_edit, tod_edit, cloud_edit),...
+    'Tooltip','Drive the vehicle manually using the W-A-S-D keys.');
 drive_btn.Text = "Drive Vehicle";
 drive_btn.FontName = "Helvetica";
 drive_btn.FontWeight = "bold";
@@ -429,15 +459,16 @@ function AddSensor(add_sensor_btn, sensor_listbox)
     sens_gl.RowHeight = {30,30,30,30, 30, 30, 30, 30};
     sens_gl.ColumnWidth = {'fit','1x'};
     
-    type_dd = uidropdown(sens_gl, "ValueChangedFcn",@(src,event) UpdateList(src,event));
-    %type_dd.Items=["Lidar"]; %#ok<NBRAK2> %,"Camera"];
+    type_dd = uidropdown(sens_gl, "ValueChangedFcn",...
+        @(src,event) UpdateList(src,event),'Tooltip',...
+        'Select the type of sensor');
     type_dd.Items=["Lidar", "Camera"];
     type_dd.Layout.Column = [1 2];
     type_dd.Layout.Row = 1;
 
     lidar_list = ["OS2", "M8", "HDL-64E", "HDL-32E", "VLP-16", "LMS-291", "OS1", "OS1-16", "RS32"];
     camera_list = ["XCD-V60","Raspberry Pi Camera Module 2", "Raspberry Pi Camera Module 3"];
-    dd = uidropdown(sens_gl);
+    dd = uidropdown(sens_gl,'Tooltip','Select the sensor brand/model.');
     dd.Items = lidar_list;
     dd.Layout.Column=[3 4];
     dd.Layout.Row = 1;
@@ -450,79 +481,97 @@ function AddSensor(add_sensor_btn, sensor_listbox)
         drawnow;
     end
 
-    off_lbl = uilabel(sens_gl,'Text','Offset from CG (xyz):');
+    off_lbl = uilabel(sens_gl,'Text',...
+        'Offset from vehicle center-of-gravity (x,y,z):','Tooltip', ...
+        'X is forward, Y is left, Z is up');
     off_lbl.Layout.Row=2;
     off_lbl.Layout.Column=[1 4];
-    off_x_edit = uieditfield(sens_gl,'numeric');
+    off_x_edit = uieditfield(sens_gl,'numeric','Tooltip',...
+        'x (forward) offset in meters');
     off_x_edit.Layout.Row=3;
-    off_x_edit.Layout.Column=2;
+    off_x_edit.Layout.Column=1;
     off_x_edit.Value = 1.0;
-    off_y_edit = uieditfield(sens_gl,'numeric');
+    off_y_edit = uieditfield(sens_gl,'numeric','Tooltip',...
+        'y (left) offset in meters');
     off_y_edit.Layout.Row=3;
-    off_y_edit.Layout.Column=3;
+    off_y_edit.Layout.Column=2;
     off_y_edit.Value = 0.0;
-    off_z_edit = uieditfield(sens_gl,'numeric');
+    off_z_edit = uieditfield(sens_gl,'numeric','Tooltip',...
+        'z (up) offset in meters');
     off_z_edit.Layout.Row=3;
-    off_z_edit.Layout.Column=4;
+    off_z_edit.Layout.Column=3;
     off_z_edit.Value = 1.5;
 
-    ori_lbl = uilabel(sens_gl,'Text','Relative orientation (wxyz):');
+    ori_lbl = uilabel(sens_gl,'Text','Relative orientation (w,x,y,z):',...
+        'Tooltip','Specified as a quaternion.');
     ori_lbl.Layout.Row=4;
     ori_lbl.Layout.Column=[1 4];
-    ori_w_edit = uieditfield(sens_gl,'numeric');
+    ori_w_edit = uieditfield(sens_gl,'numeric','Tooltip',...
+        'w-component of the quaternion');
     ori_w_edit.Layout.Row=5;
     ori_w_edit.Layout.Column=1;
     ori_w_edit.Value = 1.0;
-    ori_x_edit = uieditfield(sens_gl,'numeric');
+    ori_x_edit = uieditfield(sens_gl,'numeric','Tooltip',...
+        'x-component of the quaternion');
     ori_x_edit.Layout.Row=5;
     ori_x_edit.Layout.Column=2;
     ori_x_edit.Value = 0.0;
-    ori_y_edit = uieditfield(sens_gl,'numeric');
+    ori_y_edit = uieditfield(sens_gl,'numeric','Tooltip',...
+        'y-component of the quaternion');
     ori_y_edit.Layout.Row=5;
     ori_y_edit.Layout.Column=3;
     ori_y_edit.Value = 0.0;
-    ori_z_edit = uieditfield(sens_gl,'numeric');
+    ori_z_edit = uieditfield(sens_gl,'numeric','Tooltip',...
+        'z-component of the quaternion');
     ori_z_edit.Layout.Row=5;
     ori_z_edit.Layout.Column=4;
     ori_z_edit.Value = 0.0;
 
-    fnsh_sensor_btn = uibutton(sens_gl,'Text','Add','ButtonPushedFcn',...
-    @(fnsh_sensor_btn,event)FinishSensor());
-    fnsh_sensor_btn.Layout.Row=6;
-    fnsh_sensor_btn.Layout.Column=[1 2];
-
-    cancel_btn = uibutton(sens_gl,'Text','Cancel','ButtonPushedFcn',@(cancel_btn,event)CancelSensor());
-    cancel_btn.Layout.Row=6;
-    cancel_btn.Layout.Column=[3 4];
-
-    sensor_name_label = uilabel(sens_gl,'Text','Sensor Name:');
-    sensor_name_label.Layout.Row=7;
+    sensor_name_label = uilabel(sens_gl,'Text','Sensor Name:','Tooltip',...
+        'Give the sensor a unique name so you can ID it later.');
+    sensor_name_label.Layout.Row=6;
     sensor_name_label.Layout.Column=1;
-    sensor_name_edit = uieditfield(sens_gl);
-    sensor_name_edit.Layout.Row=7;
+    sensor_name_edit = uieditfield(sens_gl,'Tooltip',...
+        'Give the sensor a unique name so you can ID it later.');
+    sensor_name_edit.Layout.Row=6;
     sensor_name_edit.Layout.Column=[2 4];
-
-    display_box = uicheckbox(sens_gl);
+    sensor_name_edit.Value = 'my_sensor';
+    
+    display_box = uicheckbox(sens_gl,'Tooltip',...
+        'Check to display the sensor output in real time during the simulation.');
     display_box.Text = 'Display Sensor Output?';
     display_box.FontName = "Helvetica";
     display_box.FontWeight = "bold";
-    display_box.Layout.Row=8;
+    display_box.Layout.Row=7;
     display_box.Layout.Column=1;
     display_box.Value = false;
 
-    save_sens_box = uicheckbox(sens_gl);
+    save_sens_box = uicheckbox(sens_gl,'Tooltip',...
+        'Check to save the sensor output frame by frame.');
     save_sens_box.Text = 'Save Sensor Output?';
     save_sens_box.FontName = "Helvetica";
     save_sens_box.FontWeight = "bold";
-    save_sens_box.Layout.Row=8;
+    save_sens_box.Layout.Row=7;
     save_sens_box.Layout.Column=[2 3];
     save_sens_box.Value = false;
 
+    fnsh_sensor_btn = uibutton(sens_gl,'Text','Add','ButtonPushedFcn',...
+    @(fnsh_sensor_btn,event)FinishSensor(),'Tooltip',...
+    'Click when finished editing sensor.');
+    fnsh_sensor_btn.Layout.Row=8;
+    fnsh_sensor_btn.Layout.Column=[1 2];
+
+    cancel_btn = uibutton(sens_gl,'Text','Cancel',...
+        'ButtonPushedFcn',@(cancel_btn,event)CancelSensor(),'Tooltip',...
+        'Exit without adding sensor');
+    cancel_btn.Layout.Row=8;
+    cancel_btn.Layout.Column=[3 4];
+
     function FinishSensor()
         if (strcmp(sensor_listbox.Items(end),""))
-            sensor_listbox.Items(end) = {type_dd.Value};
+            sensor_listbox.Items(end) = {sensor_name_edit.Value};
         else
-            sensor_listbox.Items(end+1) = {type_dd.Value};
+            sensor_listbox.Items(end+1) = {sensor_name_eidt.Value};
         end
         if (strcmp(type_dd.Value,"Lidar"))
             lidar = MavsLidar(dd.Value);
